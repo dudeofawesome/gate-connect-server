@@ -5,14 +5,21 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import {User} from "./user.entity"
 
 @Entity()
-export class Login {
+export class LogLogin {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  uuid: string;
 
   @Column('timestamptz')
   time: Date;
 
   // ManyToOne: user_id
+  @ManyToOne(type => User, user.logins)
+  user: User;
 }
+
