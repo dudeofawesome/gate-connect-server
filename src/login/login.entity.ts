@@ -7,12 +7,12 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Requests {
+export class Login {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('timestamptz')
   time: Date;
 
-  // ManyToMany: user_id, gate_id
+  // ManyToOne: user_id
 }

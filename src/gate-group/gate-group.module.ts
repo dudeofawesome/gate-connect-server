@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GateGroupService } from './gate_group_group.service';
-import { GateGroupController } from './gate_group_group.controller';
-import { GateGroup } from './gate_group_group.entity';
+import { GateGroupService } from './gate-group.service';
+import { GateGroupController } from './gate-group.controller';
+import { GateGroup } from './gate-group.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([GateGroup])],

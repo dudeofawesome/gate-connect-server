@@ -7,12 +7,12 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class UserTokens {
+export class Request {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar(???)')
-  authorization_token: string;
+  @Column('timestamptz')
+  time: Date;
 
-  // ManyToOne: user_id
+  // ManyToMany: user_id, gate_id
 }
