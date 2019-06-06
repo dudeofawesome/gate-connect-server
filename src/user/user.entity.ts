@@ -10,9 +10,12 @@ import {
 } from 'typeorm';
 import { UserToken } from '../user-token/user-token.entity';
 
+import { Exclude } from 'class-transformer';
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
   @Column()
@@ -24,6 +27,7 @@ export class User {
   email: string;
 
   @Column('text')
+  @Exclude()
   password: string;
 
   @Column('text')
