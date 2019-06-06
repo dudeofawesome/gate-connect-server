@@ -11,11 +11,11 @@ import { UserModule } from './user/user.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'dudeofawesome',
-      password: '',
-      database: 'dudeofawesome',
+      host: 'doa-server.local',
+      port: 54322,
+      username: 'postgres',
+      password: 'geminate catchy runny wee zoophyte coax record achieve pipette coward',
+      database: 'postgres',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
@@ -27,6 +27,6 @@ import { UserModule } from './user/user.module';
 })
 export class AppModule {
   constructor(private readonly connection: Connection) {
-    console.log('HI!');
+    console.log('HI! I\'m running! I\'m a real program!');
   }
 }
