@@ -3,16 +3,32 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
+  ManyToOne,
+  Index,
+  Generated,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class UserToken {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column('varchar(???)')
+  @Column()
+  @Index({ unique: true })
+  @Generated('uuid')
+  uuid: string;
+
+  @Column('text')
+  @Index({ unique: true })
   authorization_token: string;
 
-  // ManyToOne: user_id
+  @CreateDateColumn({ type: 'timestamptz' })
+  created_at: Date;
+
+  @Column({ type: 'interval', default: '1337 seconds' })
+  ttl: number;
+
+  @ManyToOne(type => User, (user: User) => user.tokens, { cascade: true })
+  user: User;
 }
