@@ -17,4 +17,10 @@ export class UserService {
   create(user: Partial<User>): Promise<User> {
     return this.userRepository.save<User>(this.userRepository.create(user));
   }
+
+  async findOneByUUID(uuid: string): Promise<User> {
+    return await this.userRepository.findOneOrFail({
+      where: { uuid },
+    });
+  }
 }

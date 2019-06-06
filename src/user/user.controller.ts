@@ -5,6 +5,7 @@ import {
   Body,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Param,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -18,6 +19,12 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   findAll(): Promise<User[]> {
     return this.userService.findAll();
+  }
+
+  @Get(':uuid')
+  @UseInterceptors(ClassSerializerInterceptor)
+  findOneByUUID(@Param('uuid') uuid: string): Promise<User> {
+    return this.userService.findOneByUUID(uuid);
   }
 
   @Post()
