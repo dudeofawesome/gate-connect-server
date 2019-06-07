@@ -14,7 +14,9 @@ export class GateGroupOwnerService {
     return this.GateGroupOwnerRepository.find();
   }
 
-  create(gate-group-owner: Partial<GateGroupOwner>): Promise<GateGroupOwner> {
-    return this.GateGroupOwnerRepository.save<GateGroupOwner>(this.GateGroupOwnerRepository.create(gate-group-owner));
+  create(gate_group_owner: Partial<GateGroupOwner>): Promise<GateGroupOwner> {
+    return this.GateGroupOwnerRepository.save<GateGroupOwner>(
+      this.GateGroupOwnerRepository.create(gate_group_owner),
+    );
   }
 }

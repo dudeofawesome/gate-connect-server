@@ -14,7 +14,9 @@ export class GateGroupService {
     return this.GateGroupRepository.find();
   }
 
-  create(gate-group: Partial<GateGroup>): Promise<GateGroup> {
-    return this.GateGroupRepository.save<GateGroup>(this.GateGroupRepository.create(gate-group));
+  create(gate_group: Partial<GateGroup>): Promise<GateGroup> {
+    return this.GateGroupRepository.save<GateGroup>(
+      this.GateGroupRepository.create(gate_group),
+    );
   }
 }

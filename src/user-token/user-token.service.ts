@@ -14,7 +14,9 @@ export class UserTokenService {
     return this.UserTokenRepository.find();
   }
 
-  create(user-token: Partial<UserToken>): Promise<UserToken> {
-    return this.UserTokenRepository.save<UserToken>(this.UserTokenRepository.create(user-token));
+  create(user_token: Partial<UserToken>): Promise<UserToken> {
+    return this.UserTokenRepository.save<UserToken>(
+      this.UserTokenRepository.create(user_token),
+    );
   }
 }
