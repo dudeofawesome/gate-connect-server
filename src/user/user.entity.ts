@@ -14,6 +14,7 @@ import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
 
 import { Exclude } from 'class-transformer';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class User {
@@ -27,9 +28,11 @@ export class User {
   uuid: string;
 
   @Column('text', { unique: true })
+  @IsEmail()
   email: string;
 
   @Column('text')
+  @IsNotEmpty()
   @Exclude()
   password: string;
 
