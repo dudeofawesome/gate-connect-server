@@ -6,6 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { UserTokenModule } from './user-token/user-token.module';
 
 @Module({
   imports: [
@@ -14,19 +16,22 @@ import { UserModule } from './user/user.module';
       host: 'doa-server.local',
       port: 54322,
       username: 'postgres',
-      password: 'geminate catchy runny wee zoophyte coax record achieve pipette coward',
+      password:
+        'geminate catchy runny wee zoophyte coax record achieve pipette coward',
       database: 'postgres',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
 
+    AuthModule,
     UserModule,
+    UserTokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
   constructor(private readonly connection: Connection) {
-    console.log('HI! I\'m running! I\'m a real program!');
+    console.log("HI! I'm running! I'm a real program!");
   }
 }

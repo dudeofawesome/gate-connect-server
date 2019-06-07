@@ -10,9 +10,4 @@ export class UserTokenController {
   findAll(): Promise<UserToken[]> {
     return this.UserTokenService.findAll();
   }
-
-  @Post()
-  create(@Body() body: Partial<UserToken>): Promise<UserToken> {
-    return this.UserTokenService.create(body);
-  }
 }

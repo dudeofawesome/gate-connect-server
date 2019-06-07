@@ -6,16 +6,19 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { User } from './user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   findAll(): Promise<User[]> {
     return this.userService.findAll();

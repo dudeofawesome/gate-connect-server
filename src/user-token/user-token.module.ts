@@ -8,5 +8,6 @@ import { UserToken } from './user-token.entity';
   imports: [TypeOrmModule.forFeature([UserToken])],
   providers: [UserTokenService],
   controllers: [UserTokenController],
+  exports: [UserTokenService],
 })
 export class UserTokenModule {}

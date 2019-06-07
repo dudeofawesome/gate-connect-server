@@ -1,22 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserToken } from './user-token.entity';
+import { User } from '../user/';
 
 @Injectable()
 export class UserTokenService {
   constructor(
     @InjectRepository(UserToken)
-    private readonly UserTokenRepository: Repository<UserToken>,
+    private readonly userTokenRepository: Repository<UserToken>,
   ) {}
 
   findAll(): Promise<UserToken[]> {
-    return this.UserTokenRepository.find();
+    return this.userTokenRepository.find();
   }
 
-  create(user_token: Partial<UserToken>): Promise<UserToken> {
-    return this.UserTokenRepository.save<UserToken>(
-      this.UserTokenRepository.create(user_token),
+  createTokenForUserId(id: number): Promise<UserToken> {
+    // Logger.log(id);
+    // const token = new UserToken();
+    // token.authorization_token = 'test2';
+    return this.userTokenRepository.save(
+      this.userTokenRepository.create({
+        user: { id },
+        authorization_token: Math.floor(Math.random() * 9999999) + '',
+      }),
+      // token,
     );
   }
 }
