@@ -29,6 +29,6 @@ export class UserToken {
   @Column({ type: 'interval', default: '1337 seconds' })
   ttl: number;
 
-  @ManyToOne(type => User, (user: User) => user.tokens, { cascade: true })
+  @ManyToOne(type => User, user => user.tokens, { cascade: true })
   user: User;
 }

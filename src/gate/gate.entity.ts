@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
   Generated,
   Index,
 } from 'typeorm';
+import { GateGroup } from '../gate-group/gate-group.entity';
 
 @Entity()
 export class Gate {
@@ -29,4 +31,9 @@ export class Gate {
 
   @Column('point')
   location: string;
+
+  @ManyToOne(type => GateGroup, (gate_group: GateGroup) => gate_group.gates, {
+    cascade: true,
+  })
+  gate_group: GateGroup;
 }
