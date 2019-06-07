@@ -4,9 +4,14 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
   Generated,
   Index,
 } from 'typeorm';
+import { Gate } from '../gate/gate.entity';
+import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
 
 @Entity()
 export class GateGroup {
@@ -26,4 +31,10 @@ export class GateGroup {
 
   @Column('text')
   description: string;
+
+  @OneToMany(type => Gate, (gate: Gate) => gate.gate_group)
+  gates: Gate[];
+
+  @ManyToOne(type => GateGroupOwner, gate_group_owner => gate_group_owner.gate_groups)
+  gate_group_owner: GateGroupOwner;
 }

@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
   Generated,
   Index,
 } from 'typeorm';
 import { UserToken } from '../user-token/user-token.entity';
+import { GateGroup } from '../gate-group/gate-group.entity';
 
 @Entity()
 export class User {
@@ -56,6 +59,10 @@ export class User {
   @Column({ default: false })
   verified_address: boolean;
 
-  @OneToMany(type => UserToken, (user_token: UserToken) => user_token.user)
+  @OneToMany(type => UserToken, user_token => user_token.user)
   tokens: UserToken[];
+
+  @ManyToMany(type => GateGroup)
+  @JoinTable()
+  join: GateGroup[];
 }
