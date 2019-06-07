@@ -6,10 +6,22 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 import { UserService } from './user.service';
 import { User } from './user.entity';
+
+// TODO: Put this somewhere nicer
+export class CreateUserDto {
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  password: string;
+}
 
 @Controller('users')
 export class UserController {
@@ -29,7 +41,8 @@ export class UserController {
 
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
-  create(@Body() body: Partial<User>): Promise<User> {
+  // @UsePipes(new ValidationPipe())
+  create(@Body() body: CreateUserDto): Promise<User> {
     return this.userService.create(body);
   }
 }
