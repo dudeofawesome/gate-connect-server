@@ -3,8 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { AuthService, JwtStrategy, AuthController } from './';
-import { UserModule } from '../user/';
-import { UserTokenModule } from '../user-token/';
+import { UserModule } from '../user/user.module';
+import { UserTokenModule } from '../user-token/user-token.module';
 
 export const passportModule = PassportModule.register({
   defaultStrategy: 'jwt',
