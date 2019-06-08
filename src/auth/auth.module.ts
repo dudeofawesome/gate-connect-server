@@ -15,7 +15,8 @@ export const passportModule = PassportModule.register({
     passportModule,
     JwtModule.register({
       // TODO: change the key!
-      secretOrPrivateKey: 'secretKey',
+      // TODO: consider using `privateKey` instead
+      secret: 'secretKey',
       signOptions: {
         // TODO: should be in config
         expiresIn: 3600,

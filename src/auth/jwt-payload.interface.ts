@@ -1,3 +1,5 @@
 export interface JwtPayload {
-  email: string;
+  uuid: string;
+  iat: number;
+  exp: number;
 }

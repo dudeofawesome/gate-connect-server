@@ -1,13 +1,23 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { UserTokenService } from './user-token.service';
 import { UserToken } from './user-token.entity';
 
 @Controller('user-token')
 export class UserTokenController {
-  constructor(private readonly UserTokenService: UserTokenService) {}
+  constructor(
+    @Inject(forwardRef(() => UserTokenService))
+    private readonly userTokenService: UserTokenService,
+  ) {}
 
   @Get()
   findAll(): Promise<UserToken[]> {
-    return this.UserTokenService.findAll();
+    return this.userTokenService.findAll();
   }
 }

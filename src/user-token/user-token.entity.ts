@@ -7,17 +7,21 @@ import {
   Index,
   Generated,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+
 import { User } from '../user/user.entity';
 
 @Entity()
 export class UserToken {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
-  @Column()
-  @Index({ unique: true })
-  @Generated('uuid')
-  uuid: string;
+  // @Column()
+  // @Index({ unique: true })
+  // @Generated('uuid')
+  // @Exclude()
+  // uuid: string;
 
   @Column('text')
   @Index({ unique: true })

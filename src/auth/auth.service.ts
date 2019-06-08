@@ -1,4 +1,4 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { User, UserService } from '../user/';
@@ -9,17 +9,17 @@ export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    @Inject(forwardRef(() => JwtService))
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(): Promise<string> {
+  signIn(user: User): string {
     // In the real-world app you shouldn't expose this method publicly
     // instead, return a token once you verify user credentials
-    const user: JwtPayload = { email: 'user@email.com' };
-    return this.jwtService.sign(user);
+    return this.jwtService.sign({ uuid: user.uuid });
   }
 
-  validateUser(payload: JwtPayload): Promise<User> {
-    return this.userService.findOneByEmail(payload.email);
+  validateJWT(payload: JwtPayload): Promise<User> {
+    return this.userService.findOneByUUID(payload.uuid);
   }
 }
