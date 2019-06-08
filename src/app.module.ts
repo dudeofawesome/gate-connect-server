@@ -31,7 +31,5 @@ import { UserTokenModule } from './user-token/user-token.module';
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private readonly connection: Connection) {
-    console.log("HI! I'm running! I'm a real program!");
-  }
+  constructor(private readonly connection: Connection) {}
 }
