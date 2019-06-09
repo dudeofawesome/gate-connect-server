@@ -8,8 +8,10 @@ import {
   Generated,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import {} from '@nestjs/swagger';
 
 import { User } from '../user/user.entity';
+import { JwtPayload } from '../auth/';
 
 @Entity()
 export class UserToken {
@@ -17,21 +19,19 @@ export class UserToken {
   @Exclude()
   id: number;
 
-  // @Column()
-  // @Index({ unique: true })
-  // @Generated('uuid')
-  // @Exclude()
-  // uuid: string;
-
+  // TODO: make this be the relationship
   @Column('text')
-  @Index({ unique: true })
-  authorization_token: string;
+  @Index()
+  /** Token's subject (user's UUID) */
+  token_payload_sub: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  @Column('timestamptz')
+  @Index()
+  /** Token's issued at date */
+  token_payload_iat: Date;
 
-  @Column({ type: 'interval', default: '1337 seconds' })
-  ttl: number;
+  @Column({ default: false })
+  blacklisted: boolean;
 
   @ManyToOne(type => User, user => user.tokens, {
     cascade: true,

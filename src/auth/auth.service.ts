@@ -1,8 +1,15 @@
-import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  forwardRef,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { User, UserService } from '../user/';
 import { JwtPayload } from './jwt-payload.interface';
+import { UserTokenService } from '../user-token/';
 
 @Injectable()
 export class AuthService {
@@ -11,15 +18,25 @@ export class AuthService {
     private readonly userService: UserService,
     @Inject(forwardRef(() => JwtService))
     private readonly jwtService: JwtService,
+    @Inject(forwardRef(() => UserTokenService))
+    private readonly userTokenService: UserTokenService,
   ) {}
 
-  signIn(user: User): string {
-    // In the real-world app you shouldn't expose this method publicly
-    // instead, return a token once you verify user credentials
-    return this.jwtService.sign({ uuid: user.uuid });
+  signIn(user: User): Promise<string> {
+    const payload: Partial<JwtPayload> = { sub: user.uuid };
+    return this.jwtService.signAsync(payload);
   }
 
-  validateJWT(payload: JwtPayload): Promise<User> {
-    return this.userService.findOneByUUID(payload.uuid);
+  async validateJWT(payload: JwtPayload): Promise<User> {
+    if (payload.exp * 1000 <= Date.now()) {
+      throw new UnauthorizedException('Token expired');
+    }
+
+    const token = await this.userTokenService.findOneByToken(payload);
+    if (token.blacklisted) {
+      throw new UnauthorizedException('Token blacklisted');
+    }
+
+    return this.userService.findOneByUUID(payload.sub);
   }
 }

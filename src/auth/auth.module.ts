@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
@@ -20,9 +20,15 @@ export const passportModule = PassportModule.register({
       signOptions: {
         // TODO: should be in config
         expiresIn: 3600,
+        // TODO: switch to an ECDSA algorithm
+        // algorithm: 'ES256',
+        // TODO: change this to hostname env var
+        issuer: 'api.gate-connect.com',
+        // TODO: change to website hostname
+        audience: 'gate-connect.com',
       },
     }),
-    UserModule,
+    forwardRef(() => UserModule),
     UserTokenModule,
   ],
   providers: [AuthService, JwtStrategy],

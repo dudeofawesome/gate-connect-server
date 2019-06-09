@@ -12,8 +12,11 @@ async function bootstrap() {
     .use(helmet());
 
   const options = new DocumentBuilder()
+    // TODO: read this from package.json
     .setTitle('Gate Connect')
+    // TODO: read this from package.json
     .setDescription('The Gate Connect API')
+    // TODO: read this from package.json
     .setVersion('0.0.1')
     .build();
   const document = SwaggerModule.createDocument(app, options);

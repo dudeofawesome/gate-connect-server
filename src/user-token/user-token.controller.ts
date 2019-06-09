@@ -15,9 +15,4 @@ export class UserTokenController {
     @Inject(forwardRef(() => UserTokenService))
     private readonly userTokenService: UserTokenService,
   ) {}
-
-  @Get()
-  findAll(): Promise<UserToken[]> {
-    return this.userTokenService.findAll();
-  }
 }
