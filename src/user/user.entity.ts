@@ -55,9 +55,11 @@ export class User {
   verification_address_sent_at: Date;
 
   @Column('text', { nullable: true })
+  @Exclude()
   verification_email_token: string;
 
   @Column('text', { nullable: true })
+  @Exclude()
   verification_address_pin: string;
 
   @Column({ default: false })
