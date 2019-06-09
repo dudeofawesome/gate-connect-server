@@ -32,7 +32,6 @@ export class User {
   email: string;
 
   @Column('text')
-  @IsNotEmpty()
   @Exclude()
   password: string;
 

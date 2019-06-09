@@ -18,6 +18,7 @@ import {
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { hash, verify } from 'argon2';
 
 import { AuthService } from './auth.service';
 import { User, UserService } from '../user/';
@@ -52,7 +53,7 @@ export class AuthController {
         }
       });
     // TODO: hash + salt password
-    if (user.password === authInfo.password) {
+    if (await verify(user.password, authInfo.password)) {
       const jwt = await this.authService.signIn(user);
       await this.userTokenService.saveToken(jwt);
       return jwt;

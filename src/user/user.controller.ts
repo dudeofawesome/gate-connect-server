@@ -16,9 +16,12 @@ import {
   HttpException,
   HttpStatus,
   Req,
+  InternalServerErrorException,
+  ConflictException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { hash } from 'argon2';
 
 import { UserService, User } from '../user';
 import { AuthService, JwtPayload } from '../auth';
@@ -65,9 +68,26 @@ export class UserController {
   }
 
   @Post()
+  // TODO: disallow authed requests
   @UseInterceptors(ClassSerializerInterceptor)
   // @UsePipes(new ValidationPipe())
-  create(@Body() body: User): Promise<User> {
-    return this.userService.create(body);
+  async create(@Body() body: User): Promise<User> {
+    return this.userService
+      .create({
+        ...body,
+        password: await hash(body.password),
+      })
+      .catch(err => {
+        switch (err.constructor) {
+          case QueryFailedError:
+            if ((err.detail as string).startsWith('Key (email)=(')) {
+              throw new ConflictException('Email already registered');
+            } else {
+              throw new InternalServerErrorException();
+            }
+          default:
+            throw new InternalServerErrorException();
+        }
+      });
   }
 }
