@@ -14,6 +14,7 @@ import {
   HttpStatus,
   Req,
   Headers,
+  Delete,
 } from '@nestjs/common';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { Request } from 'express';
@@ -62,17 +63,14 @@ export class AuthController {
     }
   }
 
-  @Post('logout')
+  @Delete('logout')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async logout(
     @Req() req: Request,
-    @Headers('Authorization') auth: string,
+    @Headers('authorization') auth: string,
   ): Promise<boolean> {
-    // TODO: blacklist token
-    console.log(req.authInfo);
-    console.log(req.user);
-    console.log(auth);
+    await this.userTokenService.blacklistToken(auth.split('Bearer ')[1]);
     return true;
   }
 }

@@ -42,4 +42,15 @@ export class UserTokenService {
       }),
     );
   }
+
+  async blacklistToken(jwt: string): Promise<any> {
+    const payload: Readonly<JwtPayload> = this.jwtService.decode(jwt) as any;
+    await this.userTokenRepository.update(
+      {
+        token_payload_sub: payload.sub,
+        token_payload_iat: new Date((payload.iat || 0) * 1000),
+      },
+      { blacklisted: true },
+    );
+  }
 }
