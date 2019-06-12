@@ -8,10 +8,9 @@ import {
   Generated,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import {} from '@nestjs/swagger';
 
 import { User } from '../user/user.entity';
-import { JwtPayload } from '../auth/';
+import { TimestampTzTransformer } from '../utils/timestampz.transformer';
 
 @Entity()
 export class UserToken {
@@ -19,19 +18,18 @@ export class UserToken {
   @Exclude()
   id: number;
 
-  // TODO: make this be the relationship
   @Column('text')
-  @Index()
-  /** Token's subject (user's UUID) */
-  token_payload_sub: string;
+  @Index({ unique: true })
+  authorization_token: string;
 
-  @Column('timestamptz')
-  @Index()
-  /** Token's issued at date */
-  token_payload_iat: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  created_at: Date;
 
-  @Column({ default: false })
-  blacklisted: boolean;
+  @Column({ type: 'interval', default: '1337 seconds' })
+  ttl: number;
 
   @ManyToOne(type => User, user => user.tokens, {
     cascade: true,

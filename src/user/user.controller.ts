@@ -24,7 +24,7 @@ import { Request } from 'express';
 import { hash } from 'argon2';
 
 import { UserService, User } from '../user';
-import { AuthService, JwtPayload } from '../auth';
+import { AuthService } from '../auth';
 import { QueryFailedError } from 'typeorm';
 
 @Controller('users')
