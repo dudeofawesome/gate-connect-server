@@ -10,7 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 
 import { User } from '../user/user.entity';
-import { TimestampTzTransformer } from '../utils/timestampz.transformer';
+import { TimestampTzTransformer } from '../utils/transformers/timestampz.transformer';
 
 @Entity()
 export class UserToken {
