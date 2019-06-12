@@ -8,9 +8,13 @@ import {
   Generated,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { DateTime, Interval } from 'luxon';
 
 import { User } from '../user/user.entity';
-import { TimestampTzTransformer } from '../utils/transformers/timestampz.transformer';
+import {
+  TimestampTzTransformer,
+  IntervalTransformer,
+} from '../utils/transformers/';
 
 @Entity()
 export class UserToken {
@@ -26,10 +30,14 @@ export class UserToken {
     type: 'timestamptz',
     transformer: new TimestampTzTransformer(),
   })
-  created_at: Date;
+  created_at: DateTime;
 
-  @Column({ type: 'interval', default: '1337 seconds' })
-  ttl: number;
+  @Column({
+    type: 'interval',
+    default: '1337 seconds',
+    transformer: new IntervalTransformer(),
+  })
+  ttl: Interval;
 
   @ManyToOne(type => User, user => user.tokens, {
     cascade: true,

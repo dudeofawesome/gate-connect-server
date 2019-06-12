@@ -1,29 +1,28 @@
 import { ValueTransformer } from 'typeorm';
+import { DateTime } from 'luxon';
 
 export class TimestampTzTransformer implements ValueTransformer {
-  to(value?: number | Date): Date | undefined {
+  to(value?: number | Date | DateTime): string | undefined {
     if (value == null) {
       return undefined;
-    }
-
-    const value_type = typeof value;
-
-    if (value_type === 'number') {
-      return new Date(value);
+    } else if (typeof value === 'number') {
+      return new Date(value).toISOString();
+    } else if (value instanceof Date) {
+      return value.toISOString();
+    } else if (value instanceof DateTime) {
+      return value.toISO();
     }
   }
 
-  from(value?: string | Date): Date | undefined {
+  from(value?: string | number | Date): DateTime | undefined {
     if (value == null) {
       return undefined;
-    }
-
-    const value_type = typeof value;
-
-    if (value_type === 'string' || value_type === 'number') {
-      return new Date(value);
+    } else if (typeof value === 'string') {
+      return DateTime.fromISO(value);
+    } else if (typeof value === 'number') {
+      return DateTime.fromSeconds(value);
     } else if (value instanceof Date) {
-      return value;
+      return DateTime.fromJSDate(value);
     } else {
       throw new Error('unexpected type');
     }
