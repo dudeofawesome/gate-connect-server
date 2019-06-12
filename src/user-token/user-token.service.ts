@@ -12,11 +12,15 @@ export class UserTokenService {
     private readonly userTokenRepository: Repository<UserToken>,
   ) {}
 
-  findOneByToken(token: string): Promise<UserToken> {
+  findOneByToken(
+    token: string,
+    include_user: boolean = true,
+  ): Promise<UserToken> {
     return this.userTokenRepository.findOneOrFail({
       where: {
         authorization_token: token,
       },
+      relations: include_user ? ['user'] : [],
     });
   }
 
