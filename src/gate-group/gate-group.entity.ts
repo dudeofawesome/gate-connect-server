@@ -7,20 +7,13 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  Generated,
-  Index,
 } from 'typeorm';
 import { Gate } from '../gate/gate.entity';
 import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
 
 @Entity()
 export class GateGroup {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  @Index({ unique: true })
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
@@ -35,6 +28,9 @@ export class GateGroup {
   @OneToMany(type => Gate, (gate: Gate) => gate.gate_group)
   gates: Gate[];
 
-  @ManyToOne(type => GateGroupOwner, gate_group_owner => gate_group_owner.gate_groups)
+  @ManyToOne(
+    type => GateGroupOwner,
+    gate_group_owner => gate_group_owner.gate_groups,
+  )
   gate_group_owner: GateGroupOwner;
 }

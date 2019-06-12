@@ -18,13 +18,7 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  @Exclude()
-  id: number;
-
-  @Column()
-  @Index({ unique: true })
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
   @Column('text', { unique: true })

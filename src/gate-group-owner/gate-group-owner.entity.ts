@@ -12,12 +12,7 @@ import { GateGroup } from '../gate-group/gate-group.entity';
 
 @Entity()
 export class GateGroupOwner {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  @Index({ unique: true })
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
   @CreateDateColumn({ type: 'timestamptz' })

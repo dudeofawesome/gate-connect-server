@@ -27,7 +27,7 @@ export class UserTokenService {
   async saveToken(token: string, user: User): Promise<UserToken> {
     return await this.userTokenRepository.save(
       this.userTokenRepository.create({
-        user: { id: user.id },
+        user: { uuid: user.uuid },
         authorization_token: token,
       }),
     );
