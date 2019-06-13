@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { UserTokenModule } from './user-token/user-token.module';
 import { GateModule } from './gate/gate.module';
+import { GateGroupModule } from './gate-group/gate-group.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { GateModule } from './gate/gate.module';
     UserModule,
     UserTokenModule,
     GateModule,
+    GateGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

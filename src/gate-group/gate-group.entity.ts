@@ -7,6 +7,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -47,5 +48,6 @@ export class GateGroup {
     type => GateGroupOwner,
     gate_group_owner => gate_group_owner.gate_groups,
   )
+  @JoinColumn({ name: 'gate_group_owner_uuid' })
   gate_group_owner: GateGroupOwner;
 }

@@ -7,16 +7,22 @@ import { GateGroup } from './gate-group.entity';
 export class GateGroupService {
   constructor(
     @InjectRepository(GateGroup)
-    private readonly GateGroupRepository: Repository<GateGroup>,
+    private readonly gateGroupRepository: Repository<GateGroup>,
   ) {}
 
   findAll(): Promise<GateGroup[]> {
-    return this.GateGroupRepository.find();
+    return this.gateGroupRepository.find();
+  }
+
+  async findOneByUUID(uuid: string): Promise<GateGroup> {
+    return await this.gateGroupRepository.findOneOrFail({
+      where: { uuid },
+    });
   }
 
   create(gate_group: Partial<GateGroup>): Promise<GateGroup> {
-    return this.GateGroupRepository.save<GateGroup>(
-      this.GateGroupRepository.create(gate_group),
+    return this.gateGroupRepository.save<GateGroup>(
+      this.gateGroupRepository.create(gate_group),
     );
   }
 }
