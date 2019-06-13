@@ -31,6 +31,7 @@ export class UserToken {
     type: 'timestamptz',
     transformer: new TimestampTzTransformer(),
   })
+  @Transform(DateTimeToString)
   created_at: DateTime;
 
   @Column({
