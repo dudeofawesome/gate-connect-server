@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -12,8 +13,11 @@ import { DateTime } from 'luxon';
 import {
   TimestampTzTransformer,
   DateTimeToString,
+  PointTransformer,
+  PointToXY,
 } from '../utils/transformers/';
 import { GateGroup } from '../gate-group/gate-group.entity';
+import { Point } from './point';
 
 @Entity()
 export class Gate {
@@ -37,11 +41,14 @@ export class Gate {
   @Column('text')
   description: string;
 
-  @Column('point')
-  location: string;
+  @Column({ type: 'point', transformer: new PointTransformer() })
+  @Transform(PointToXY)
+  location: Point;
 
   @ManyToOne(type => GateGroup, (gate_group: GateGroup) => gate_group.gates, {
     cascade: true,
   })
+  // TODO: this seems like the way to set a join column's name
+  @JoinColumn({ name: 'gate_group_uuid' })
   gate_group: GateGroup;
 }

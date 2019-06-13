@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { UserTokenModule } from './user-token/user-token.module';
+import { GateModule } from './gate/gate.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UserTokenModule } from './user-token/user-token.module';
     AuthModule,
     UserModule,
     UserTokenModule,
+    GateModule,
   ],
   controllers: [AppController],
   providers: [AppService],
