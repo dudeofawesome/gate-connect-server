@@ -55,14 +55,13 @@ export class UserController {
     try {
       return await this.userService.findOneByUUID(uuid);
     } catch (ex) {
-      switch (ex.constructor) {
-        case QueryFailedError:
-          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        default:
-          throw new HttpException(
-            'Unknown error',
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
+      if (ex instanceof QueryFailedError) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      } else {
+        throw new HttpException(
+          'Unknown error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
     }
   }
@@ -78,15 +77,14 @@ export class UserController {
         password: await hash(body.password),
       })
       .catch(err => {
-        switch (err.constructor) {
-          case QueryFailedError:
-            if ((err.detail as string).startsWith('Key (email)=(')) {
-              throw new ConflictException('Email already registered');
-            } else {
-              throw new InternalServerErrorException();
-            }
-          default:
+        if (err instanceof QueryFailedError) {
+          if (((err as any).detail as string).startsWith('Key (email)=(')) {
+            throw new ConflictException('Email already registered');
+          } else {
             throw new InternalServerErrorException();
+          }
+        } else {
+          throw new InternalServerErrorException();
         }
       });
   }
