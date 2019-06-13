@@ -5,11 +5,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { PassportModule } from '@nestjs/passport';
-import { AuthModule } from '../auth/auth.module';
-
-export const passportModule = PassportModule.register({
-  defaultStrategy: 'jwt',
-});
+import { AuthModule, passportModule } from '../auth/auth.module';
 
 @Module({
   imports: [
