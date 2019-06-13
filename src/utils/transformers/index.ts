@@ -1,2 +1,3 @@
+export * from './class-tranformers';
 export * from './interval.transformer';
-export * from './timestampz.transformer';
+export * from './timestamptz.transformer';

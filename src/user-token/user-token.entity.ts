@@ -7,13 +7,14 @@ import {
   Index,
   Generated,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { DateTime, Interval } from 'luxon';
+import { Exclude, Transform } from 'class-transformer';
+import { DateTime, Duration } from 'luxon';
 
 import { User } from '../user/user.entity';
 import {
   TimestampTzTransformer,
   IntervalTransformer,
+  DateTimeToString,
 } from '../utils/transformers/';
 
 @Entity()
@@ -37,7 +38,8 @@ export class UserToken {
     default: '1337 seconds',
     transformer: new IntervalTransformer(),
   })
-  ttl: Interval;
+  @Transform((val: Duration) => val.toISO())
+  ttl: Duration;
 
   @ManyToOne(type => User, user => user.tokens, {
     cascade: true,

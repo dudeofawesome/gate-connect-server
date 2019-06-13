@@ -10,11 +10,16 @@ import {
   Generated,
   Index,
 } from 'typeorm';
+import { Exclude, Transform } from 'class-transformer';
+import { IsEmail } from 'class-validator';
+import { DateTime } from 'luxon';
+
+import {
+  TimestampTzTransformer,
+  DateTimeToString,
+} from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
-
-import { Exclude } from 'class-transformer';
-import { IsEmail, IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class User {
@@ -35,17 +40,35 @@ export class User {
   @Column('text')
   address: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  created_at: DateTime;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  updated_at: DateTime;
 
-  @Column('timestamptz', { nullable: true })
-  verification_email_sent_at: Date;
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  verification_email_sent_at: DateTime;
 
-  @Column('timestamptz', { nullable: true })
-  verification_address_sent_at: Date;
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  verification_address_sent_at: DateTime;
 
   @Column('text', { nullable: true })
   @Exclude()

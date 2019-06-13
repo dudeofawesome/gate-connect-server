@@ -8,6 +8,13 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { Transform } from 'class-transformer';
+import { DateTime } from 'luxon';
+
+import {
+  TimestampTzTransformer,
+  DateTimeToString,
+} from '../utils/transformers/';
 import { Gate } from '../gate/gate.entity';
 import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
 
@@ -16,11 +23,19 @@ export class GateGroup {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  created_at: DateTime;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  updated_at: DateTime;
 
   @Column('text')
   description: string;
