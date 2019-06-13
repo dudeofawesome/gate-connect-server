@@ -50,6 +50,7 @@ export class UserController {
   }
 
   @Get(':uuid')
+  @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async findOneByUUID(@Param('uuid') uuid: string): Promise<User> {
     try {
