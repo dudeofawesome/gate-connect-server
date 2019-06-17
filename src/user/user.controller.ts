@@ -27,6 +27,7 @@ import { QueryFailedError } from 'typeorm';
 import { UserService, User } from '../user';
 import { AuthService } from '../auth';
 import { QueryFailedErrorFull } from '../types/query-failed-error-full';
+import { UserParam } from '../utils/decorators';
 
 @Controller('users')
 export class UserController {
@@ -46,8 +47,8 @@ export class UserController {
   @Get('/self')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
-  async getSelf(@Req() req: Request): Promise<User> {
-    return req.user as User;
+  async getSelf(@UserParam() user: User): Promise<User> {
+    return user;
   }
 
   @Get(':uuid')
