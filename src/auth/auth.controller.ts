@@ -25,6 +25,7 @@ import { RandomString } from 'secure-random-value';
 import { AuthService } from './auth.service';
 import { User, UserService } from '../user/';
 import { UserToken, UserTokenService } from '../user-token';
+import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -37,7 +38,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  // TODO: disallow authed requests
+  @UseGuards(NoAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(@Body() authInfo: AuthInfo): Promise<string> {
     Logger.log(authInfo);
