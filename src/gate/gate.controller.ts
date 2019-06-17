@@ -8,10 +8,12 @@ import {
   UseGuards,
   Inject,
   forwardRef,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { GateService, Gate } from './';
+import { GateAccessGuard } from '../utils/guards';
 
 @Controller('gates')
 export class GateController {
@@ -32,5 +34,13 @@ export class GateController {
   @UseInterceptors(ClassSerializerInterceptor)
   create(@Body() body: Partial<Gate>): Promise<Gate> {
     return this.gateService.create(body);
+  }
+
+  @Post(':uuid/open')
+  @UseGuards(AuthGuard(), GateAccessGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async openGate(@Param('uuid') uuid: string): Promise<boolean> {
+    // TODO: actually open the gate
+    return true;
   }
 }
