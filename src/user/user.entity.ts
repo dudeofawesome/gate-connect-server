@@ -88,6 +88,10 @@ export class User {
   tokens: UserToken[];
 
   @ManyToMany(type => GateGroup)
-  @JoinTable()
-  join: GateGroup[];
+  @JoinTable({
+    name: 'user_join_gate_group',
+    joinColumn: { name: 'user_uuid' },
+    inverseJoinColumn: { name: 'gate_group_uuid' },
+  })
+  gate_groups: GateGroup[];
 }

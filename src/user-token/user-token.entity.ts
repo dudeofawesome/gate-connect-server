@@ -6,6 +6,7 @@ import {
   ManyToOne,
   Index,
   Generated,
+  JoinColumn,
 } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
 import { DateTime, Duration } from 'luxon';
@@ -46,5 +47,6 @@ export class UserToken {
     cascade: true,
     nullable: false,
   })
+  @JoinColumn({ name: 'user_uuid' })
   user: User;
 }
