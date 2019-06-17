@@ -22,10 +22,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { hash } from 'argon2';
+import { QueryFailedError } from 'typeorm';
 
 import { UserService, User } from '../user';
 import { AuthService } from '../auth';
-import { QueryFailedError } from 'typeorm';
+import { QueryFailedErrorFull } from '../types/query-failed-error-full';
 
 @Controller('users')
 export class UserController {
@@ -79,7 +80,8 @@ export class UserController {
       })
       .catch(err => {
         if (err instanceof QueryFailedError) {
-          if (((err as any).detail as string).startsWith('Key (email)=(')) {
+          err = err as QueryFailedErrorFull;
+          if (err.detail.startsWith('Key (email)=(')) {
             throw new ConflictException('Email already registered');
           } else {
             throw new InternalServerErrorException();
