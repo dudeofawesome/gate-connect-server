@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { GateGroup } from 'src/gate-group';
 
 @Injectable()
 export class UserService {
@@ -34,5 +35,14 @@ export class UserService {
     return await this.userRepository.findOneOrFail({
       where: { uuid },
     });
+  }
+
+  async getGateGroups(uuid: string): Promise<GateGroup[]> {
+    return this.userRepository
+      .findOneOrFail({
+        where: { uuid },
+        relations: ['gate_groups'],
+      })
+      .then(user => user.gate_groups);
   }
 }
