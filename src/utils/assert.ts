@@ -11,6 +11,7 @@ const NODE_ENV = process.env.NODE_ENV;
  */
 export function ok(condition: boolean, message?: string) {
   // TODO: figure out a better way to make this fall out in production code
+  //   maybe it could take a fn that returns a bool as a param
   if (NODE_ENV !== 'production') {
     NodeAssert(condition, message);
   }

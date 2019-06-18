@@ -10,6 +10,7 @@ import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
 import { User, UserService } from '../user/';
 import { UserTokenService, UserToken } from '../user-token/';
+import * as Assert from '../utils/assert';
 
 @Injectable()
 export class AuthService {
@@ -20,10 +21,18 @@ export class AuthService {
     private readonly userTokenService: UserTokenService,
   ) {}
 
+  /**
+   * Validates that a token exists and hasn't expired.
+   * @param token UserToken::authorization_token. Must not start with 'Bearer '
+   */
   async validateToken(token: string): Promise<User> {
+    Assert.ok(
+      !token.startsWith('Bearer '),
+      'Token must not start with "Bearer "',
+    );
+
     // Validate if token passed along with HTTP request
     // is associated with any registered account in the database
-    // return await this.userService.findOneByToken(token);
     const user_token = await this.userTokenService
       .findOneByToken(token)
       .catch(err => {
