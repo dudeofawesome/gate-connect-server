@@ -20,19 +20,19 @@ export class UserService {
   }
 
   async findOne(user: Partial<User>): Promise<User> {
-    return await this.userRepository.findOneOrFail({
+    return this.userRepository.findOneOrFail({
       where: user,
     });
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    return await this.userRepository.findOneOrFail({
+    return this.userRepository.findOneOrFail({
       where: { email },
     });
   }
 
   async findOneByUUID(uuid: string): Promise<User> {
-    return await this.userRepository.findOneOrFail({
+    return this.userRepository.findOneOrFail({
       where: { uuid },
     });
   }
