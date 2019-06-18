@@ -41,7 +41,7 @@ export class UserService {
     return this.userRepository
       .findOneOrFail({
         where: { uuid },
-        relations: ['gate_groups'],
+        relations: ['gate_groups', 'gate_groups.gates'],
       })
       .then(user => user.gate_groups);
   }

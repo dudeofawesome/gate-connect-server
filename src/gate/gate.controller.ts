@@ -9,24 +9,34 @@ import {
   Inject,
   forwardRef,
   Param,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 import { GateService, Gate } from './';
 import { GateAccessGuard } from '../utils/guards';
+import { UserService, User } from '../user';
 
 @Controller('gates')
 export class GateController {
   constructor(
     @Inject(forwardRef(() => GateService))
     private readonly gateService: GateService,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
   ) {}
 
   @Get()
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
-  findAll(): Promise<Gate[]> {
-    return this.gateService.findAll();
+  async findAll(@Req() req: Request): Promise<Gate[]> {
+    // TODO: allow for super-admins to retrieve all gates
+    const user: User = req.user;
+    const gate_groups = await this.userService
+      .getGateGroups(user.uuid)
+      .then(groups => groups.map(group => group.gates));
+    return ([] as Gate[]).concat(...gate_groups);
   }
 
   @Post()
