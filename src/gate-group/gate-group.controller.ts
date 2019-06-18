@@ -13,9 +13,11 @@ import {
   Inject,
   forwardRef,
 } from '@nestjs/common';
-import { GateGroupService, GateGroup } from './';
 import { AuthGuard } from '@nestjs/passport';
 import { QueryFailedError } from 'typeorm';
+
+import { GateGroupService, GateGroup } from './';
+import { Gate } from '../gate/';
 
 @Controller('gate-groups')
 export class GateGroupController {
@@ -51,5 +53,14 @@ export class GateGroupController {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  @Get(':uuid/gates')
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  getGates(@Param('uuid') uuid: string): Promise<Gate[]> {
+    return this.gateGroupService
+      .findOneByUUID(uuid, true)
+      .then(group => group.gates);
   }
 }

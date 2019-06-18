@@ -14,9 +14,13 @@ export class GateGroupService {
     return this.gateGroupRepository.find();
   }
 
-  async findOneByUUID(uuid: string): Promise<GateGroup> {
+  async findOneByUUID(
+    uuid: string,
+    include_gates: boolean = false,
+  ): Promise<GateGroup> {
     return await this.gateGroupRepository.findOneOrFail({
       where: { uuid },
+      relations: include_gates ? ['gates'] : [],
     });
   }
 
