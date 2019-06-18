@@ -43,7 +43,7 @@ export class GateAccessGuard implements CanActivate {
     // get gate UUID and what gate group it's a part of
     const gate_id = req.params.uuid;
     Assert.notEqual(
-      user,
+      gate_id,
       null,
       'GateAccessGuard decorator must be run with a gate `:uuid` param in the URL path',
     );
