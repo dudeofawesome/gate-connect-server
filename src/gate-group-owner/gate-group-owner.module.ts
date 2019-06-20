@@ -1,12 +1,21 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GateGroupOwnerService } from './gate-group-owner.service';
-import { GateGroupOwnerController } from './gate-group-owner.controller';
-import { GateGroupOwner } from './gate-group-owner.entity';
+
+import {
+  GateGroupOwnerService,
+  GateGroupOwnerController,
+  GateGroupOwner,
+} from './';
+import { AuthModule, passportModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([GateGroupOwner])],
+  imports: [
+    TypeOrmModule.forFeature([GateGroupOwner]),
+    passportModule,
+    forwardRef(() => AuthModule),
+  ],
   providers: [GateGroupOwnerService],
   controllers: [GateGroupOwnerController],
+  exports: [GateGroupOwnerService],
 })
 export class GateGroupOwnerModule {}

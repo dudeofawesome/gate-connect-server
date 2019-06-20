@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserTokenModule } from './user-token/user-token.module';
 import { GateModule } from './gate/gate.module';
 import { GateGroupModule } from './gate-group/gate-group.module';
+import { GateGroupOwnerModule } from './gate-group-owner/gate-group-owner.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { GateGroupModule } from './gate-group/gate-group.module';
     UserTokenModule,
     GateModule,
     GateGroupModule,
+    GateGroupOwnerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

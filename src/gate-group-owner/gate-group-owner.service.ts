@@ -1,22 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GateGroupOwner } from './gate-group-owner.entity';
+
+import { GateGroupOwner } from './';
 
 @Injectable()
 export class GateGroupOwnerService {
   constructor(
     @InjectRepository(GateGroupOwner)
-    private readonly GateGroupOwnerRepository: Repository<GateGroupOwner>,
+    private readonly gateGroupOwnerRepository: Repository<GateGroupOwner>,
   ) {}
 
   findAll(): Promise<GateGroupOwner[]> {
-    return this.GateGroupOwnerRepository.find();
+    return this.gateGroupOwnerRepository.find();
+  }
+
+  async findOneByUUID(uuid: string): Promise<GateGroupOwner> {
+    return await this.gateGroupOwnerRepository.findOneOrFail({
+      where: { uuid },
+    });
   }
 
   create(gate_group_owner: Partial<GateGroupOwner>): Promise<GateGroupOwner> {
-    return this.GateGroupOwnerRepository.save<GateGroupOwner>(
-      this.GateGroupOwnerRepository.create(gate_group_owner),
+    return this.gateGroupOwnerRepository.save<GateGroupOwner>(
+      this.gateGroupOwnerRepository.create(gate_group_owner),
     );
   }
 }
