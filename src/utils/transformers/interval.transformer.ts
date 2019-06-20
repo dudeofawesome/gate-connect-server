@@ -14,7 +14,7 @@ export class IntervalTransformer implements ValueTransformer {
     }
   }
 
-  from(value?: string | number | any): Duration | undefined {
+  from(value?: string | number | IPostgresInterval): Duration | undefined {
     if (value == null) {
       return undefined;
     } else if (typeof value === 'number') {

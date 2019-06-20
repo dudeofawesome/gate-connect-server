@@ -35,7 +35,6 @@ export class PointTransformer implements ValueTransformer {
     } else if (value.x != null && value.y != null) {
       return new Point(value.x, value.y);
     } else {
-      console.log((value as any).constructor);
       throw new Error('unexpected type');
     }
   }
