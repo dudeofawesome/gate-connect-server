@@ -31,6 +31,7 @@ import { UserService, User } from '../user';
 import { AuthService } from '../auth';
 import { QueryFailedErrorFull } from '../types/query-failed-error-full';
 import { UserParam } from '../utils/decorators';
+import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -73,7 +74,7 @@ export class UserController {
   }
 
   @Post()
-  // TODO: disallow authed requests
+  @UseGuards(NoAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   // @UsePipes(new ValidationPipe())
   async create(@Body() body: User): Promise<User> {
