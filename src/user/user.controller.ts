@@ -17,12 +17,15 @@ import {
   HttpStatus,
   Req,
   InternalServerErrorException,
+  UnprocessableEntityException,
   ConflictException,
+  Put,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { hash } from 'argon2';
-import { QueryFailedError } from 'typeorm';
+import { QueryFailedError, DeepPartial } from 'typeorm';
 
 import { UserService, User } from '../user';
 import { AuthService } from '../auth';
@@ -91,5 +94,16 @@ export class UserController {
           throw new InternalServerErrorException();
         }
       });
+  }
+
+  @Patch(':uuid')
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  async patch(
+    @Param('uuid') uuid: string,
+    @Body() body: Partial<User>,
+  ): Promise<User> {
+    const update_res = await this.userService.patch(uuid, body);
+    return this.userService.findOneByUUID(uuid);
   }
 }

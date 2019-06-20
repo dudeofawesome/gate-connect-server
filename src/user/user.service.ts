@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from 'src/gate-group';
 
@@ -35,6 +39,18 @@ export class UserService {
     return this.userRepository.findOneOrFail({
       where: { uuid },
     });
+  }
+
+  async patch(uuid: string, user: Partial<User>): Promise<User> {
+    // TODO: verify the changes are valid
+
+    // TODO: eslint-disable findOneOrFail(string)
+    // const curr_user = await this.userRepository.findOneOrFail({
+    //   where: { uuid },
+    // });
+    await this.userRepository.update(uuid, user);
+    // TODO: return the actual user object
+    return user as User;
   }
 
   async getGateGroups(uuid: string): Promise<GateGroup[]> {
