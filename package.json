@@ -63,6 +63,7 @@
     "concurrently": "^4.1.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^5.0.0",
+    "eslint-plugin-custom-rules": "file:./eslint",
     "jest": "^24.8.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
