@@ -136,4 +136,33 @@ export class UserController {
       password: await hash(password_dto.new_password),
     });
   }
+
+  /** Verify address code */
+  @Post(':uuid/verify-address')
+  @HttpCode(200)
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  async verifyAddress(
+    @Param('uuid') uuid: string,
+    @Body() verification_address_pin: string,
+  ): Promise<void> {
+    if (
+      verification_address_pin == undefined ||
+      verification_address_pin.length < 6
+    ) {
+      throw new UnprocessableEntityException(
+        'verification_address_pin must be at least 5 characters',
+      );
+    }
+    // Get user from the database
+    const user = await this.userService.findOne({ uuid });
+    // Verify that user provided pin and pin in database match
+    if (user.verification_address_pin !== verification_address_pin) {
+      throw new UnauthorizedException(
+        'verification_address_pin does not match',
+      );
+    }
+    // Mark address as verified
+    await this.userService.patch(uuid, { verified_address: true });
+  }
 }
