@@ -1,5 +1,7 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.format.enable": false,
+  "javascript.format.enable": false,
   "eslint.validate": [
     "javascript",
     { "language": "typescript", "autoFix": true }
