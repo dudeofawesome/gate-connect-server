@@ -15,6 +15,9 @@ import {
   Req,
   Headers,
   Delete,
+  HttpCode,
+  UnprocessableEntityException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { Request } from 'express';
@@ -26,6 +29,7 @@ import { AuthService } from './auth.service';
 import { User, UserService } from '../user/';
 import { UserToken, UserTokenService } from '../user-token';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
+import { ClassTransformer } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
@@ -41,7 +45,6 @@ export class AuthController {
   @UseGuards(NoAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(@Body() authInfo: AuthInfo): Promise<string> {
-    Logger.log(authInfo);
     const user = await this.userService
       .findOne({ email: authInfo.email })
       .catch(ex => {
@@ -55,7 +58,6 @@ export class AuthController {
           );
         }
       });
-    // TODO: hash + salt password
     if (await verify(user.password, authInfo.password)) {
       const token = await RandomString(64);
       await this.userTokenService.saveToken(token, user);

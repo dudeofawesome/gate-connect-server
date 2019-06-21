@@ -6,24 +6,17 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
-  UsePipes,
-  ValidationPipe,
   UseGuards,
-  Headers,
-  Logger,
   Inject,
   forwardRef,
   HttpException,
   HttpStatus,
-  Req,
   InternalServerErrorException,
   UnprocessableEntityException,
   ConflictException,
-  Put,
   Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 import { hash } from 'argon2';
 import { QueryFailedError, DeepPartial } from 'typeorm';
 
@@ -76,7 +69,6 @@ export class UserController {
   @Post()
   @UseGuards(NoAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  // @UsePipes(new ValidationPipe())
   async create(@Body() body: User): Promise<User> {
     return this.userService
       .create({
