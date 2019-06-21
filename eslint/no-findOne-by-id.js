@@ -11,8 +11,10 @@ module.exports = context => {
         node.property.name === 'findOneOrFail' ||
         node.property.name === 'findOne'
       ) {
-        console.log('args', node.parent.arguments);
-        if (node.parent.arguments.length === 0) {
+        if (
+          node.parent.arguments == null ||
+          node.parent.arguments.length === 0
+        ) {
           context.report(
             node,
             `${node.property.name} requires at least one parameter`,
