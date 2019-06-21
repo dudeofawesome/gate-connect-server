@@ -165,4 +165,30 @@ export class UserController {
     // Mark address as verified
     await this.userService.patch(uuid, { verified_address: true });
   }
+
+  /** Verify address code */
+  @Post(':uuid/verify-email')
+  @HttpCode(200)
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  async verifyEmail(
+    @Param('uuid') uuid: string,
+    @Body() verification_email_token: string,
+  ): Promise<void> {
+    if (verification_email_token == undefined) {
+      throw new UnprocessableEntityException(
+        'Expected verification_email_token',
+      );
+    }
+    // Get user from the database
+    const user = await this.userService.findOne({ uuid });
+    // Verify that user provided pin and pin in database match
+    if (user.verification_email_token !== verification_email_token) {
+      throw new UnauthorizedException(
+        'verification_email_token does not match',
+      );
+    }
+    // Mark address as verified
+    await this.userService.patch(uuid, { verified_email: true });
+  }
 }
