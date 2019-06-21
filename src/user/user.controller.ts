@@ -107,4 +107,33 @@ export class UserController {
     const update_res = await this.userService.patch(uuid, body);
     return this.userService.findOneByUUID(uuid);
   }
+
+  /** if old password matches new password, update password */
+  @Post(':uuid/change-password')
+  @HttpCode(200)
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  async changePassword(
+    @Param('uuid') uuid: string,
+    @Body() password_dto: PasswordChangeDTO,
+  ): Promise<void> {
+    if (
+      password_dto.new_password == undefined ||
+      password_dto.old_password == undefined
+    ) {
+      throw new UnprocessableEntityException(
+        'Expected old_password and new_password',
+      );
+    }
+    // Get user from the database
+    const user = await this.userService.findOne({ uuid });
+    // Verify old_password and current password match (argon2)
+    if (!(await verify(user.password, password_dto.old_password))) {
+      throw new UnauthorizedException('old_password does not match');
+    }
+    // hash new password and patch it in the database
+    await this.userService.patch(uuid, {
+      password: await hash(password_dto.new_password),
+    });
+  }
 }
