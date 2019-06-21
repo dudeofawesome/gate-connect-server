@@ -37,7 +37,7 @@ export class UserToken {
 
   @Column({
     type: 'interval',
-    default: '1337 seconds',
+    default: '1 year',
     transformer: new IntervalTransformer(),
   })
   @Transform((val: Duration) => val.toISO())
