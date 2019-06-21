@@ -1,10 +1,6 @@
-import {
-  Injectable,
-  ForbiddenException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeepPartial } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from 'src/gate-group';
 
@@ -41,52 +37,8 @@ export class UserService {
     });
   }
 
-  async patch(uuid: string, user: Partial<User>): Promise<User> {
-    // TODO: verify the changes are valid
-    if (user.uuid != null && user.uuid !== uuid) {
-      // TODO: see if there's a better exception to throw here
-      throw new ForbiddenException('Cannot change user.uuid');
-    } else if (user.password != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.password in a full user patch',
-      );
-    } else if (user.created_at != null) {
-      throw new UnprocessableEntityException('Cannot change user.created_at');
-    } else if (user.updated_at != null) {
-      throw new UnprocessableEntityException('Cannot change user.updated_at');
-    } else if (user.verified_email != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verified_email',
-      );
-    } else if (user.verified_address != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verified_address',
-      );
-    } else if (user.verification_email_token != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_email_token',
-      );
-    } else if (user.verification_address_pin != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_address_pin',
-      );
-    } else if (user.verification_email_sent_at != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_email_sent_at',
-      );
-    } else if (user.verification_address_sent_at != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_address_sent_at',
-      );
-    }
-
-    // TODO: eslint-disable findOneOrFail(string)
-    // const curr_user = await this.userRepository.findOneOrFail({
-    //   where: { uuid },
-    // });
+  async patch(uuid: string, user: Partial<User>): Promise<void> {
     await this.userRepository.update(uuid, user);
-    // TODO: return the actual user object
-    return user as User;
   }
 
   async getGateGroups(uuid: string): Promise<GateGroup[]> {

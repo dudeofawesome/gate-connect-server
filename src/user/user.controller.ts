@@ -15,16 +15,19 @@ import {
   UnprocessableEntityException,
   ConflictException,
   Patch,
+  UnauthorizedException,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { hash } from 'argon2';
-import { QueryFailedError, DeepPartial } from 'typeorm';
+import { hash, verify } from 'argon2';
+import { QueryFailedError } from 'typeorm';
 
 import { UserService, User } from '../user';
 import { AuthService } from '../auth';
 import { QueryFailedErrorFull } from '../types/query-failed-error-full';
 import { UserParam } from '../utils/decorators';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
+import { PasswordChangeDTO } from './password-change-dto';
 
 @Controller('users')
 export class UserController {
@@ -94,9 +97,45 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   async patch(
     @Param('uuid') uuid: string,
-    @Body() body: Partial<User>,
+    @Body() user: Partial<User>,
   ): Promise<User> {
-    const update_res = await this.userService.patch(uuid, body);
+    if (user.uuid != null && user.uuid !== uuid) {
+      throw new UnprocessableEntityException('Cannot change user.uuid');
+    } else if (user.password != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.password in a full user patch',
+      );
+    } else if (user.created_at != null) {
+      throw new UnprocessableEntityException('Cannot change user.created_at');
+    } else if (user.updated_at != null) {
+      throw new UnprocessableEntityException('Cannot change user.updated_at');
+    } else if (user.verified_email != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.verified_email',
+      );
+    } else if (user.verified_address != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.verified_address',
+      );
+    } else if (user.verification_email_token != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.verification_email_token',
+      );
+    } else if (user.verification_address_pin != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.verification_address_pin',
+      );
+    } else if (user.verification_email_sent_at != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.verification_email_sent_at',
+      );
+    } else if (user.verification_address_sent_at != null) {
+      throw new UnprocessableEntityException(
+        'Cannot change user.verification_address_sent_at',
+      );
+    }
+
+    await this.userService.patch(uuid, user);
     return this.userService.findOneByUUID(uuid);
   }
 
