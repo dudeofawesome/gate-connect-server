@@ -139,7 +139,7 @@ export class UserController {
     return this.userService.findOneByUUID(uuid);
   }
 
-  /** if old password matches new password, update password */
+  /** Update user password */
   @Post(':uuid/change-password')
   @HttpCode(200)
   @UseGuards(AuthGuard())
