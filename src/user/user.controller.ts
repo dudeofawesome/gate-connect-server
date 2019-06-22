@@ -30,6 +30,7 @@ import { UserParam } from '../utils/decorators';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 import { UserInfoGuard } from '../utils/guards/user-info.guard';
 import { PasswordChangeDTO } from './password-change-dto';
+import { UserAccess } from '../utils/guards/user-access.guard';
 
 @Controller('users')
 export class UserController {
@@ -53,8 +54,8 @@ export class UserController {
     return user;
   }
 
-  @UseGuards(AuthGuard())
   @Get(':user_uuid')
+  @UseGuards(AuthGuard(), UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
   async findOneByUUID(@Param('uuid') uuid: string): Promise<User> {
     try {
@@ -114,7 +115,7 @@ export class UserController {
   /** Update user password */
   @Post(':user_uuid/change-password')
   @HttpCode(200)
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
   async changePassword(
     @Param('user_uuid') uuid: string,
@@ -143,7 +144,7 @@ export class UserController {
   /** Verify address code */
   @Post(':user_uuid/verify-address')
   @HttpCode(200)
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyAddress(
     @Param('user_uuid') uuid: string,
@@ -172,7 +173,7 @@ export class UserController {
   /** Verify address code */
   @Post(':user_uuid/verify-email')
   @HttpCode(200)
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyEmail(
     @Param('user_uuid') uuid: string,
