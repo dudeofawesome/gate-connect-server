@@ -75,11 +75,11 @@ export class UserController {
   @Post()
   @UseGuards(NoAuthGuard, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() body: User): Promise<User> {
+  async create(@Body() user: User): Promise<User> {
     return this.userService
       .create({
-        ...body,
-        password: await hash(body.password),
+        ...user,
+        password: await hash(user.password),
       })
       .catch(err => {
         if (err instanceof QueryFailedError) {
