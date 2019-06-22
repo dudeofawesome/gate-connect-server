@@ -53,8 +53,8 @@ export class UserController {
     return user;
   }
 
-  @Get(':uuid')
   @UseGuards(AuthGuard())
+  @Get(':user_uuid')
   @UseInterceptors(ClassSerializerInterceptor)
   async findOneByUUID(@Param('uuid') uuid: string): Promise<User> {
     try {
@@ -94,11 +94,11 @@ export class UserController {
       });
   }
 
-  @Patch(':uuid')
+  @Patch(':user_uuid')
   @UseGuards(AuthGuard(), UserInfoGuard, UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
   async patch(
-    @Param('uuid') uuid: string,
+    @Param('user_uuid') uuid: string,
     @Body() user: Partial<User>,
   ): Promise<User> {
     if (user.password != null) {
@@ -112,12 +112,12 @@ export class UserController {
   }
 
   /** Update user password */
-  @Post(':uuid/change-password')
+  @Post(':user_uuid/change-password')
   @HttpCode(200)
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async changePassword(
-    @Param('uuid') uuid: string,
+    @Param('user_uuid') uuid: string,
     @Body() password_dto: PasswordChangeDTO,
   ): Promise<void> {
     if (
@@ -141,12 +141,12 @@ export class UserController {
   }
 
   /** Verify address code */
-  @Post(':uuid/verify-address')
+  @Post(':user_uuid/verify-address')
   @HttpCode(200)
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyAddress(
-    @Param('uuid') uuid: string,
+    @Param('user_uuid') uuid: string,
     @Body() verification_address_pin: string,
   ): Promise<void> {
     if (
@@ -170,12 +170,12 @@ export class UserController {
   }
 
   /** Verify address code */
-  @Post(':uuid/verify-email')
+  @Post(':user_uuid/verify-email')
   @HttpCode(200)
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyEmail(
-    @Param('uuid') uuid: string,
+    @Param('user_uuid') uuid: string,
     @Body() verification_email_token: string,
   ): Promise<void> {
     if (verification_email_token == undefined) {

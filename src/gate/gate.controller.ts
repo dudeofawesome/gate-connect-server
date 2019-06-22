@@ -46,10 +46,10 @@ export class GateController {
     return this.gateService.create(body);
   }
 
-  @Post(':uuid/open')
+  @Post(':gate_uuid/open')
   @UseGuards(AuthGuard(), GateAccessGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async openGate(@Param('uuid') uuid: string): Promise<boolean> {
+  async openGate(@Param('gate_uuid') uuid: string): Promise<boolean> {
     // TODO: actually open the gate
     return true;
   }

@@ -45,10 +45,12 @@ export class GateGroupOwnerController {
     });
   }
 
-  @Get(':uuid')
+  @Get(':gate_group_owner_uuid')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOneByUUID(@Param('uuid') uuid: string): Promise<GateGroupOwner> {
+  async findOneByUUID(
+    @Param('gate_group_owner_uuid') uuid: string,
+  ): Promise<GateGroupOwner> {
     try {
       return await this.gateGroupOwnerService.findOneByUUID(uuid);
     } catch (ex) {
@@ -60,11 +62,11 @@ export class GateGroupOwnerController {
     }
   }
 
-  @Post(':uuid/gate-groups')
+  @Post(':gate_group_owner_uuid/gate-groups')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   createGateGroup(
-    @Param('uuid') uuid: string,
+    @Param('gate_group_owner_uuid') uuid: string,
     @Body() body: Partial<GateGroupOwner>,
   ): Promise<GateGroupOwner> {
     return this.gateGroupOwnerService.create(body).catch(err => {

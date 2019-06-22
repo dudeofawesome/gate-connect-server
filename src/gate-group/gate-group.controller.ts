@@ -40,10 +40,12 @@ export class GateGroupController {
     return this.gateGroupService.create(body);
   }
 
-  @Get(':uuid')
+  @Get(':gate_group_uuid')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOneByUUID(@Param('uuid') uuid: string): Promise<GateGroup> {
+  async findOneByUUID(
+    @Param('gate_group_uuid') uuid: string,
+  ): Promise<GateGroup> {
     try {
       return await this.gateGroupService.findOneByUUID(uuid);
     } catch (ex) {
@@ -55,10 +57,10 @@ export class GateGroupController {
     }
   }
 
-  @Get(':uuid/gates')
+  @Get(':gate_group_uuid/gates')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
-  getGates(@Param('uuid') uuid: string): Promise<Gate[]> {
+  getGates(@Param('gate_group_uuid') uuid: string): Promise<Gate[]> {
     return this.gateGroupService
       .findOneByUUID(uuid, true)
       .then(group => group.gates);
