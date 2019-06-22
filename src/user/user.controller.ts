@@ -17,6 +17,7 @@ import {
   Patch,
   UnauthorizedException,
   HttpCode,
+  Logger,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { hash, verify } from 'argon2';
@@ -27,6 +28,7 @@ import { AuthService } from '../auth';
 import { QueryFailedErrorFull } from '../types/query-failed-error-full';
 import { UserParam } from '../utils/decorators';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
+import { UserInfoGuard } from '../utils/guards/user-info.guard';
 import { PasswordChangeDTO } from './password-change-dto';
 
 @Controller('users')
@@ -70,7 +72,7 @@ export class UserController {
   }
 
   @Post()
-  @UseGuards(NoAuthGuard)
+  @UseGuards(NoAuthGuard, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async create(@Body() body: User): Promise<User> {
     return this.userService
@@ -93,45 +95,15 @@ export class UserController {
   }
 
   @Patch(':uuid')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), UserInfoGuard, UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
   async patch(
     @Param('uuid') uuid: string,
     @Body() user: Partial<User>,
   ): Promise<User> {
-    if (user.uuid != null && user.uuid !== uuid) {
-      throw new UnprocessableEntityException('Cannot change user.uuid');
-    } else if (user.password != null) {
+    if (user.password != null) {
       throw new UnprocessableEntityException(
         'Cannot change user.password in a full user patch',
-      );
-    } else if (user.created_at != null) {
-      throw new UnprocessableEntityException('Cannot change user.created_at');
-    } else if (user.updated_at != null) {
-      throw new UnprocessableEntityException('Cannot change user.updated_at');
-    } else if (user.verified_email != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verified_email',
-      );
-    } else if (user.verified_address != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verified_address',
-      );
-    } else if (user.verification_email_token != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_email_token',
-      );
-    } else if (user.verification_address_pin != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_address_pin',
-      );
-    } else if (user.verification_email_sent_at != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_email_sent_at',
-      );
-    } else if (user.verification_address_sent_at != null) {
-      throw new UnprocessableEntityException(
-        'Cannot change user.verification_address_sent_at',
       );
     }
 
