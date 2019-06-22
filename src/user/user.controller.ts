@@ -64,6 +64,7 @@ export class UserController {
       if (ex instanceof QueryFailedError) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       } else {
+        Logger.error(ex);
         throw new HttpException(
           'Unknown error',
           HttpStatus.INTERNAL_SERVER_ERROR,
