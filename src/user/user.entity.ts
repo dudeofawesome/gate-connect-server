@@ -25,6 +25,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
+  // TODO: Think about breaking emails into a one-to-one table
   @Column('text', { unique: true })
   @IsEmail()
   // @UserEditable() TODO: create this decorator
@@ -38,6 +39,7 @@ export class User {
   // @UserEditable() TODO: create this decorator
   name: string;
 
+  // TODO: Think about breaking addresses out into a one-to-one table
   @Column('text')
   // @UserEditable() TODO: create this decorator
   address: string;
