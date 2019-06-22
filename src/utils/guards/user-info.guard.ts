@@ -13,7 +13,14 @@ import { Reflector } from '@nestjs/core';
 export class UserInfoGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
+  // TODO: This is ugly. Replace this with a decorator that we reflect on
   isUserEditable(key: string) {
+    // This is how you might use the decorator in the todo below below
+    // const user_editable = this.reflector.get<string[]>(
+    //   'email_user_editable',
+    //   context.getHandler(),
+    // );
+    // console.log(user_editable);
     const user_editable_columns = ['email', 'name', 'address'];
     return user_editable_columns.includes(key);
   }

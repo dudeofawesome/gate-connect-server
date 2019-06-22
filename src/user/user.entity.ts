@@ -20,6 +20,7 @@ import {
 } from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
+import { UserEditable } from '../utils/decorators/user.editable.decorator';
 
 @Entity()
 export class User {
@@ -28,6 +29,7 @@ export class User {
 
   @Column('text', { unique: true })
   @IsEmail()
+  // @UserEditable() TODO: create this decorator
   email: string;
 
   @Column('text')
@@ -35,9 +37,11 @@ export class User {
   password: string;
 
   @Column('text')
+  // @UserEditable() TODO: create this decorator
   name: string;
 
   @Column('text')
+  // @UserEditable() TODO: create this decorator
   address: string;
 
   @CreateDateColumn({
