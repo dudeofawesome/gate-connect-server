@@ -7,8 +7,6 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
-  Generated,
-  Index,
 } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
 import { IsEmail } from 'class-validator';

@@ -7,7 +7,6 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
-  HttpException,
   NotFoundException,
   InternalServerErrorException,
   Inject,

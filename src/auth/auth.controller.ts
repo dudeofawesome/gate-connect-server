@@ -1,11 +1,9 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   UseInterceptors,
   ClassSerializerInterceptor,
-  Param,
   UseGuards,
   Logger,
   Inject,
@@ -15,28 +13,22 @@ import {
   Req,
   Headers,
   Delete,
-  HttpCode,
-  UnprocessableEntityException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { hash, verify } from 'argon2';
+import { verify } from 'argon2';
 import { RandomString } from 'secure-random-value';
 
-import { AuthService } from './auth.service';
-import { User, UserService } from '../user/';
-import { UserToken, UserTokenService } from '../user-token';
+import { UserService } from '../user/';
+import { UserTokenService } from '../user-token';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
-import { ClassTransformer } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
-    private readonly authService: AuthService,
     @Inject(forwardRef(() => UserTokenService))
     private readonly userTokenService: UserTokenService,
   ) {}
