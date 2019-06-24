@@ -1,14 +1,12 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
-  Index,
-  Generated,
   JoinColumn,
+  PrimaryColumn,
 } from 'typeorm';
-import { Exclude, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { DateTime, Duration } from 'luxon';
 
 import { User } from '../user/user.entity';
@@ -20,12 +18,7 @@ import {
 
 @Entity()
 export class UserToken {
-  @PrimaryGeneratedColumn()
-  @Exclude()
-  id: number;
-
-  @Column('text')
-  @Index({ unique: true })
+  @PrimaryColumn('text')
   authorization_token: string;
 
   @CreateDateColumn({
