@@ -11,9 +11,12 @@ import { UserTokenModule } from './user-token/user-token.module';
 import { GateModule } from './gate/gate.module';
 import { GateGroupModule } from './gate-group/gate-group.module';
 import { GateGroupOwnerModule } from './gate-group-owner/gate-group-owner.module';
+import { ConfigModule } from './config/config.module';
 
 @Module({
   imports: [
+    ConfigModule,
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'doa-server.local',
