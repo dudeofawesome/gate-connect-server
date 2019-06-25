@@ -49,6 +49,6 @@ export class GateGroupOwner {
   @Column('text')
   address: string;
 
-  @OneToMany(type => GateGroup, gate_group => gate_group.gate_group_owner)
+  @OneToMany(() => GateGroup, gate_group => gate_group.gate_group_owner)
   gate_groups: GateGroup[];
 }

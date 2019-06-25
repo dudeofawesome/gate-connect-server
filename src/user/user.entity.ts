@@ -67,10 +67,10 @@ export class User {
   @Column({ default: false })
   verified_address: boolean;
 
-  @OneToMany(type => UserToken, user_token => user_token.user)
+  @OneToMany(() => UserToken, user_token => user_token.user)
   tokens: UserToken[];
 
-  @ManyToMany(type => GateGroup)
+  @ManyToMany(() => GateGroup)
   @JoinTable({
     name: 'user_join_gate_group',
     joinColumn: { name: 'user_uuid' },

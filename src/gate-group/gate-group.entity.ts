@@ -41,11 +41,11 @@ export class GateGroup {
   @Column('text')
   description: string;
 
-  @OneToMany(type => Gate, (gate: Gate) => gate.gate_group)
+  @OneToMany(() => Gate, (gate: Gate) => gate.gate_group)
   gates: Gate[];
 
   @ManyToOne(
-    type => GateGroupOwner,
+    () => GateGroupOwner,
     gate_group_owner => gate_group_owner.gate_groups,
   )
   @JoinColumn({ name: 'gate_group_owner_uuid' })

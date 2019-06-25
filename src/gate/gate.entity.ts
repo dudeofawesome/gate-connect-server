@@ -45,10 +45,8 @@ export class Gate {
   @Transform(PointToXY)
   location: Point;
 
-  @ManyToOne(type => GateGroup, (gate_group: GateGroup) => gate_group.gates, {
-    cascade: true,
-  })
   // TODO: this seems like the way to set a join column's name
+  @ManyToOne(() => GateGroup, (gate_group: GateGroup) => gate_group.gates)
   @JoinColumn({ name: 'gate_group_uuid' })
   gate_group: GateGroup;
 }

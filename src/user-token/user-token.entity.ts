@@ -37,8 +37,7 @@ export class UserToken {
   @Transform((val: Duration) => val.toISO())
   ttl: Duration;
 
-  @ManyToOne(type => User, user => user.tokens, {
-    cascade: true,
+  @ManyToOne(() => User, user => user.tokens, {
     nullable: false,
   })
   @JoinColumn({ name: 'user_uuid' })
