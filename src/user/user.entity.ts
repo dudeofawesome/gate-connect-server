@@ -19,6 +19,7 @@ import {
 import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
 import { UserEditable } from '../utils/decorators/user.editable.decorator';
+import { UserAddress } from '../user_address';
 
 @Entity()
 export class User {
@@ -38,11 +39,6 @@ export class User {
   @Column('text')
   // @UserEditable() TODO: create this decorator
   name: string;
-
-  // TODO: Think about breaking addresses out into a one-to-one table
-  @Column('text')
-  // @UserEditable() TODO: create this decorator
-  address: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -66,27 +62,12 @@ export class User {
   @Transform(DateTimeToString)
   verification_email_sent_at: DateTime;
 
-  @Column({
-    type: 'timestamptz',
-    nullable: true,
-    transformer: new TimestampTzTransformer(),
-  })
-  @Transform(DateTimeToString)
-  verification_address_sent_at: DateTime;
-
   @Column('text', { nullable: true })
   @Exclude()
   verification_email_token: string;
 
-  @Column('text', { nullable: true })
-  @Exclude()
-  verification_address_pin: string;
-
   @Column({ default: false })
   verified_email: boolean;
-
-  @Column({ default: false })
-  verified_address: boolean;
 
   @OneToMany(type => UserToken, user_token => user_token.user)
   tokens: UserToken[];
@@ -98,4 +79,11 @@ export class User {
     inverseJoinColumn: { name: 'gate_group_uuid' },
   })
   gate_groups: GateGroup[];
+
+  /** One User to Many UserAddress */
+  @OneToMany(
+    () => UserAddress,
+    (user_address: UserAddress) => user_address.user,
+  )
+  user_addresses: UserAddress[]; // TODO: UNCOMMENT THIS BLOCK
 }
