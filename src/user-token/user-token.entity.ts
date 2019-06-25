@@ -15,6 +15,7 @@ import {
   IntervalTransformer,
   DateTimeToString,
 } from '../utils/transformers/';
+import { ConfigService } from '../config/config.service';
 
 @Entity()
 export class UserToken {
@@ -30,7 +31,7 @@ export class UserToken {
 
   @Column({
     type: 'interval',
-    default: '1 year',
+    default: ConfigService.getInstance().get('USER_TOKEN_TTL'),
     transformer: new IntervalTransformer(),
   })
   @Transform((val: Duration) => val.toISO())
