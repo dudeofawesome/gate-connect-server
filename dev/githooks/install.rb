@@ -2,24 +2,25 @@
 # Makes symlinks in $ROOT/.git/hooks from $ROOT/dev/githooks
 
 git_hooks_folder = "#{Dir.pwd}/.git/hooks"
-git_hooks = [
-  'applypatch-msg',
-  'pre-applypatch',
-  'post-applypatch',
-  'pre-commit',
-  'prepare-commit-msg',
-  'commit-msg',
-  'post-commit',
-  'pre-rebase',
-  'post-checkout',
-  'post-merge',
-  'pre-receive',
-  'update',
-  'post-receive',
-  'post-update',
-  'pre-auto-gc',
-  'post-rewrite',
-  'pre-push',
+# List of all possible git hooks
+git_hooks = %w[
+  applypatch-msg
+  pre-applypatch
+  post-applypatch
+  pre-commit
+  prepare-commit-msg
+  commit-msg
+  post-commit
+  pre-rebase
+  post-checkout
+  post-merge
+  pre-receive
+  update
+  post-receive
+  post-update
+  pre-auto-gc
+  post-rewrite
+  pre-push
 ]
 
 # make .git/hooks folder if it doesn't exist
