@@ -5,8 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  Generated,
-  Index,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';

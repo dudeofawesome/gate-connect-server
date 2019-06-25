@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { GateGroup } from 'src/gate-group';
+import { GateGroup } from '../gate-group';
 
 @Injectable()
 export class UserService {

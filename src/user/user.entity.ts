@@ -17,7 +17,7 @@ import {
 } from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
-import { UserEditable } from '../utils/decorators/user.editable.decorator';
+// import { UserEditable } from '../utils/decorators/user.editable.decorator';
 import { UserEmail } from '../user_email';
 
 @Entity()
