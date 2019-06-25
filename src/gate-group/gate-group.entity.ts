@@ -59,6 +59,7 @@ export class GateGroup {
     (gate_group_address: GateGroupAddress) => gate_group_address.gate_group,
   )
   gate_group_addresses: GateGroupAddress[];
+
   // Put this in the "Many" entity
   /** Many B to One A */
   // @ManyToOne(() => A, (a: A) => a.bs)
