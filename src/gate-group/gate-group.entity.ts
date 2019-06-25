@@ -41,13 +41,26 @@ export class GateGroup {
   @Column('text')
   description: string;
 
+  /** One GateGroup to Many Gate */
   @OneToMany(() => Gate, (gate: Gate) => gate.gate_group)
   gates: Gate[];
 
+  /** Many GateGroup to One GateGroupOwner */
   @ManyToOne(
     () => GateGroupOwner,
     gate_group_owner => gate_group_owner.gate_groups,
   )
   @JoinColumn({ name: 'gate_group_owner_uuid' })
   gate_group_owner: GateGroupOwner;
+
+  // Put this in the "Many" entity
+  /** Many B to One A */
+  // @ManyToOne(() => A, (a: A) => a.bs)
+  // @JoinColumn({ name: 'a_uuid' })
+  // a: A;
+
+  // Put this in the "One" entity
+  /** One A to Many B */
+  // @OneToMany(() => B, (b: B) => b.a)
+  // bs: B[];
 }

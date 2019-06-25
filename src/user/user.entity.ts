@@ -67,9 +67,11 @@ export class User {
   @Column({ default: false })
   verified_address: boolean;
 
+  /** One User to Many UserToken */
   @OneToMany(() => UserToken, user_token => user_token.user)
   tokens: UserToken[];
 
+  /** Many User to Many GateGroup */
   @ManyToMany(() => GateGroup)
   @JoinTable({
     name: 'user_join_gate_group',
@@ -83,4 +85,14 @@ export class User {
   )
   user_emails: UserEmail[];
 
+  // Put this in the "Many" entity
+  /** Many B to One A */
+  // @ManyToOne(() => A, (a: A) => a.bs)
+  // @JoinColumn({ name: 'a_uuid' })
+  // a: A;
+
+  // Put this in the "One" entity
+  /** One A to Many B */
+  // @OneToMany(() => B, (b: B) => b.a)
+  // bs: B[];
 }
