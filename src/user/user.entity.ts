@@ -9,7 +9,6 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
-import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import {
@@ -18,19 +17,14 @@ import {
 } from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
-import { UserEditable } from '../utils/decorators/user.editable.decorator';
 import { UserAddress } from '../user_address';
+// import { UserEditable } from '../utils/decorators/user.editable.decorator';
+import { UserEmail } from '../user_email';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
-
-  // TODO: Think about breaking emails into a one-to-one table
-  @Column('text', { unique: true })
-  @IsEmail()
-  // @UserEditable() TODO: create this decorator
-  email: string;
 
   @Column('text')
   @Exclude()
@@ -54,25 +48,12 @@ export class User {
   @Transform(DateTimeToString)
   updated_at: DateTime;
 
-  @Column({
-    type: 'timestamptz',
-    nullable: true,
-    transformer: new TimestampTzTransformer(),
-  })
-  @Transform(DateTimeToString)
-  verification_email_sent_at: DateTime;
-
-  @Column('text', { nullable: true })
-  @Exclude()
-  verification_email_token: string;
-
-  @Column({ default: false })
-  verified_email: boolean;
-
-  @OneToMany(type => UserToken, user_token => user_token.user)
+  /** One User to Many UserToken */
+  @OneToMany(() => UserToken, user_token => user_token.user)
   tokens: UserToken[];
 
-  @ManyToMany(type => GateGroup)
+  /** Many User to Many GateGroup */
+  @ManyToMany(() => GateGroup)
   @JoinTable({
     name: 'user_join_gate_group',
     joinColumn: { name: 'user_uuid' },
@@ -85,5 +66,20 @@ export class User {
     () => UserAddress,
     (user_address: UserAddress) => user_address.user,
   )
-  user_addresses: UserAddress[]; // TODO: UNCOMMENT THIS BLOCK
+  user_addresses: UserAddress[];
+
+  /** One User to Many UserAddress */
+  @OneToMany(() => UserEmail, (user_email: UserEmail) => user_email.user)
+  user_emails: UserEmail[];
+
+  // Put this in the "Many" entity
+  /** Many B to One A */
+  // @ManyToOne(() => A, (a: A) => a.bs)
+  // @JoinColumn({ name: 'a_uuid' })
+  // a: A;
+
+  // Put this in the "One" entity
+  /** One A to Many B */
+  // @OneToMany(() => B, (b: B) => b.a)
+  // bs: B[];
 }

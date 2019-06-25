@@ -5,24 +5,23 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
+import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import {
   TimestampTzTransformer,
   DateTimeToString,
-} from '../utils/transformers/';
-import { Gate } from '../gate/gate.entity';
-import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
+} from '../utils/transformers';
 import { GateGroupAddress } from '../gate_group_address';
+import { User } from '../user/user.entity';
 
 @Entity()
-export class GateGroup {
-  @PrimaryGeneratedColumn('uuid')
-  uuid: string;
+export class UserEmail {
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -38,27 +37,32 @@ export class GateGroup {
   @Transform(DateTimeToString)
   updated_at: DateTime;
 
+  @Column('text', { unique: true })
+  @IsEmail()
+  // @UserEditable() TODO: create this decorator
+  email: string;
+
+  @Column({ default: false })
+  primary: boolean;
+
   @Column('text')
-  description: string;
+  verification_token: string;
 
-  /** One GateGroup to Many Gate */
-  @OneToMany(() => Gate, (gate: Gate) => gate.gate_group)
-  gates: Gate[];
+  @Column({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  verification_sent_at: DateTime;
 
-  /** Many GateGroup to One GateGroupOwner */
-  @ManyToOne(
-    () => GateGroupOwner,
-    gate_group_owner => gate_group_owner.gate_groups,
-  )
-  @JoinColumn({ name: 'gate_group_owner_uuid' })
-  gate_group_owner: GateGroupOwner;
+  @Column({ default: false })
+  verified: boolean;
 
-  /** One GateGroup to Many GateGroupAddress */
-  @OneToMany(
-    () => GateGroupAddress,
-    (gate_group_address: GateGroupAddress) => gate_group_address.gate_group,
-  )
-  gate_group_addresses: GateGroupAddress[];
+  /** Many UserEmail to One User */
+  @ManyToOne(() => User, (user: User) => user.user_emails)
+  @JoinColumn({ name: 'user_uuid' })
+  user: User;
+
   // Put this in the "Many" entity
   /** Many B to One A */
   // @ManyToOne(() => A, (a: A) => a.bs)
