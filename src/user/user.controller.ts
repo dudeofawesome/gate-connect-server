@@ -151,21 +151,11 @@ export class UserController {
     @Param('user_uuid') uuid: string,
     @Body() verification_address_pin: string,
   ): Promise<void> {
-    if (
-      verification_address_pin == undefined ||
-      verification_address_pin.length < 6
-    ) {
-      throw new UnprocessableEntityException(
-        'verification_address_pin must be at least 5 characters',
-      );
-    }
     // Get user from the database
     const user = await this.userService.findOne({ uuid });
     // Verify that user provided pin and pin in database match
     if (user.verification_address_pin !== verification_address_pin) {
-      throw new UnauthorizedException(
-        'verification_address_pin does not match',
-      );
+      throw new UnauthorizedException('Invalid address verification pin');
     }
     // Mark address as verified
     await this.userService.patch(uuid, { verified_address: true });
@@ -180,18 +170,11 @@ export class UserController {
     @Param('user_uuid') uuid: string,
     @Body() verification_email_token: string,
   ): Promise<void> {
-    if (verification_email_token == undefined) {
-      throw new UnprocessableEntityException(
-        'Expected verification_email_token',
-      );
-    }
     // Get user from the database
     const user = await this.userService.findOne({ uuid });
     // Verify that user provided pin and pin in database match
     if (user.verification_email_token !== verification_email_token) {
-      throw new UnauthorizedException(
-        'verification_email_token does not match',
-      );
+      throw new UnauthorizedException('Invalid email verification token');
     }
     // Mark address as verified
     await this.userService.patch(uuid, { verified_email: true });
