@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable */
 
 /**
  * Ensure [Gitmoji](https://gitmoji.carloscuesta.me/)ness of commit messages
@@ -12,6 +13,8 @@ const COMMIT_MESSAGE_FILE = process.argv[2];
 const COMMIT_MESSAGE = FS.readFileSync(COMMIT_MESSAGE_FILE).toString();
 
 if (!COMMIT_MESSAGE.match(EmojiRegex)) {
-  console.error(`Commit message is not using [Gitmoji](https://gitmoji.carloscuesta.me/).`);
+  console.error(
+    `Commit message is not using [Gitmoji](https://gitmoji.carloscuesta.me/).`,
+  );
   process.exit(1);
 }
