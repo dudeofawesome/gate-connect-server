@@ -11,6 +11,7 @@ import { UserTokenModule } from './user-token/user-token.module';
 import { GateModule } from './gate/gate.module';
 import { GateGroupModule } from './gate-group/gate-group.module';
 import { GateGroupOwnerModule } from './gate-group-owner/gate-group-owner.module';
+import { GateGroupAddressModule } from './gate_group_address/gate_group_address.module';
 import { UserAddressModule } from './user_address/user_address.module';
 
 @Module({
@@ -34,6 +35,7 @@ import { UserAddressModule } from './user_address/user_address.module';
     GateGroupModule,
     GateGroupOwnerModule,
     UserAddressModule,
+    GateGroupAddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -18,6 +18,7 @@ import {
 } from '../utils/transformers/';
 import { Gate } from '../gate/gate.entity';
 import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
+import { GateGroupAddress } from '../gate_group_address';
 
 @Entity()
 export class GateGroup {
@@ -50,4 +51,11 @@ export class GateGroup {
   )
   @JoinColumn({ name: 'gate_group_owner_uuid' })
   gate_group_owner: GateGroupOwner;
+
+  /** One GateGroup to Many GateGroupAddress */
+  @OneToMany(
+    () => GateGroupAddress,
+    (gate_group_address: GateGroupAddress) => gate_group_address.gate_group,
+  )
+  gate_group_addresses: GateGroupAddress[];
 }
