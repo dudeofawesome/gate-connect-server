@@ -4,7 +4,7 @@
 ENV['PATH'] = "#{ENV['PATH']}:/usr/local/bin:#{Dir.pwd}/node_modules/.bin"
 
 # Check for hooks with different extensions
-file_without_ext = "dev/githooks/#{ARGV[0]}"
+file_without_ext = "dev/githooks/#{File.basename(__FILE__)}"
 if File.exist?("#{file_without_ext}.ts")
   `/usr/bin/env ts-node "#{file_without_ext}.ts" #{ARGV.join(' ')}`
 elsif File.exist?("#{file_without_ext}.rb")

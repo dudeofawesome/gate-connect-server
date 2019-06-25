@@ -18,7 +18,7 @@ PASS=true
 for file in staged_files
   "#{eslint_path} #{file}"
 
-  if $? == 0
+  if $?.exitstatus == 0
     puts "ESLint Passed: #{file}"
   else
     puts "ESLint Failed: #{file}"
