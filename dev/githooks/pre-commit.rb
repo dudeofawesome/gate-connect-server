@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
 # @type [Array<String>]
-staged_files=`git diff --cached --name-only --diff-filter=ACM`.split("\n")
+staged_files = `git diff --cached --name-only --diff-filter=ACM`.split("\n")
+staged_files_eslint = staged_files
+  .select { |file| File.extname(file).match(/tsx?|jsx?/) }
 
 if staged_files.length == 0
   exit 0
@@ -15,7 +17,7 @@ end
 
 PASS=true
 
-for file in staged_files
+for file in staged_files_eslint
   "#{eslint_path} #{file}"
 
   if $?.exitstatus == 0
