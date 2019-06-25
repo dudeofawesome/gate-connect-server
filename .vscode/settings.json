@@ -6,6 +6,10 @@
     "javascript",
     { "language": "typescript", "autoFix": true }
   ],
+  "ruby.format": false,
+  "[ruby]": {
+    "editor.formatOnSave": false
+  },
   "dash.languageIdToDocsetMap": {
     "typescript": [
       "awsjs",
