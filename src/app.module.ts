@@ -22,7 +22,7 @@ const config_service = ConfigService.getInstance();
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: config_service.get('POSTGRES_HOST'),
-      port: config_service.get('POSTGRES_PORT'),
+      port: Number.parseInt(config_service.get('POSTGRES_PORT')),
       username: config_service.get('POSTGRES_USERNAME'),
       password: config_service.get('POSTGRES_PASSWORD'),
       database: config_service.get('POSTGRES_DATABASE'),
