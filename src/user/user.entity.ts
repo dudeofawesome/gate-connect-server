@@ -9,7 +9,6 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
-import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import {
@@ -19,17 +18,12 @@ import {
 import { UserToken } from '../user-token/user-token.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
 import { UserEditable } from '../utils/decorators/user.editable.decorator';
+import { UserEmail } from '../user_email';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
-
-  // TODO: Think about breaking emails into a one-to-one table
-  @Column('text', { unique: true })
-  @IsEmail()
-  // @UserEditable() TODO: create this decorator
-  email: string;
 
   @Column('text')
   @Exclude()
@@ -64,26 +58,11 @@ export class User {
     transformer: new TimestampTzTransformer(),
   })
   @Transform(DateTimeToString)
-  verification_email_sent_at: DateTime;
-
-  @Column({
-    type: 'timestamptz',
-    nullable: true,
-    transformer: new TimestampTzTransformer(),
-  })
-  @Transform(DateTimeToString)
   verification_address_sent_at: DateTime;
 
   @Column('text', { nullable: true })
   @Exclude()
-  verification_email_token: string;
-
-  @Column('text', { nullable: true })
-  @Exclude()
   verification_address_pin: string;
-
-  @Column({ default: false })
-  verified_email: boolean;
 
   @Column({ default: false })
   verified_address: boolean;
@@ -98,4 +77,10 @@ export class User {
     inverseJoinColumn: { name: 'gate_group_uuid' },
   })
   gate_groups: GateGroup[];
+  /** One User to Many UserAddress */ @OneToMany(
+    () => UserEmail,
+    (user_email: UserEmail) => user_email.user,
+  )
+  user_emails: UserEmail[];
+
 }
