@@ -4,14 +4,12 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
 import { Gate } from '../gate/gate.entity';
-import { UserEmail } from '../user_email/user_email.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly user_email_repository: Repository<UserEmail>,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -31,10 +29,11 @@ export class UserService {
   /** Return User belonging to email */
   async findByEmail(email: string): Promise<User> {
     // Get a UserEmail from the user_email table by email
-    const user_email = await this.user_email_repository.findOneOrFail({
-      where: email,
+    return this.userRepository.findOneOrFail({
+      where: {
+        user_emails: [{ email }],
+      },
     });
-    return this.findOne(user_email.user);
   }
 
   async findOneByUUID(uuid: string): Promise<User> {
