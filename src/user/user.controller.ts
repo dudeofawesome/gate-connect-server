@@ -143,25 +143,6 @@ export class UserController {
   }
 
   /** Verify address code */
-  @Post(':user_uuid/verify-address')
-  @HttpCode(200)
-  @UseGuards(AuthGuard(), UserAccess)
-  @UseInterceptors(ClassSerializerInterceptor)
-  async verifyAddress(
-    @Param('user_uuid') uuid: string,
-    @Body() verification_address_pin: string,
-  ): Promise<void> {
-    // Get user from the database
-    const user = await this.userService.findOne({ uuid });
-    // Verify that user provided pin and pin in database match
-    if (user.verification_address_pin !== verification_address_pin) {
-      throw new UnauthorizedException('Invalid address verification pin');
-    }
-    // Mark address as verified
-    await this.userService.patch(uuid, { verified_address: true });
-  }
-
-  /** Verify address code */
   @Post(':user_uuid/verify-email')
   @HttpCode(200)
   @UseGuards(AuthGuard(), UserAccess)
