@@ -31,8 +31,10 @@ Dir.entries(File.dirname(File.expand_path(__FILE__)))
   .map { |file| file.gsub(/\.\w+$/, '') }
   .select { |hook| git_hooks.include?(hook) }
   .each do |hook|
-    File.symlink(
-      "#{File.dirname(File.expand_path(__FILE__))}/common-hook",
-      "#{git_hooks_folder}/#{hook}"
-    )
+    if !File.exist?("#{git_hooks_folder}/#{hook}")
+      File.symlink(
+        "#{File.dirname(File.expand_path(__FILE__))}/common-hook",
+        "#{git_hooks_folder}/#{hook}"
+      )
+    end
   end
