@@ -6,18 +6,40 @@ import {
   ClassSerializerInterceptor,
   Param,
   UseGuards,
+  InternalServerErrorException,
   UnauthorizedException,
   HttpCode,
+  Logger,
   Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+
+import { UserAddress } from '../user_address/user_address.entity';
 import { UserAddressService } from './user_address.service';
+import { UserParam } from '../utils/decorators/user.param.decorator';
+import { User } from '../user/user.entity';
 import { UserAddressInfoGuard } from '../utils/guards/user-address-info.guard';
 
 @Controller('user_addresses')
 export class UserAddressController {
   constructor(private readonly user_address_service: UserAddressService) {}
   @UseGuards(AuthGuard(), UserAddressInfoGuard) // TODO: Create UserAddressInfoGuard to make sure user can't change write only information
+
+  /** Create a new user address */
+  @Post()
+  @UseGuards(AuthGuard(), UserAddressInfoGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async create(
+    @Body() user_address: UserAddress,
+    @UserParam() user: User,
+  ): Promise<UserAddress> {
+    return this.user_address_service
+      .create({ ...user_address, user })
+      .catch(ex => {
+        Logger.error(ex);
+        throw new InternalServerErrorException('Unknown error');
+      });
+  }
   /** Delete user address */
   @Delete(':user_address_uuid')
   // Verify user is logged in
