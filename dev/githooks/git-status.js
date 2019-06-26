@@ -12,7 +12,9 @@ const commit = {
   hash: Exec(`git log --pretty=format:"%H" -1`),
   full: Exec(`git log -1`),
   message: Exec(`git log --pretty=format:"%B" -1`),
-  time: DateTime.fromSeconds(Exec(`git show -s --format=%ct -1`)),
+  time: DateTime.fromSeconds(
+    Number.parseInt(Exec(`git show -s --format=%ct -1`)),
+  ),
 };
 const now = DateTime.local();
 
