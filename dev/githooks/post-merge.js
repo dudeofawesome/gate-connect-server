@@ -6,17 +6,16 @@
  */
 
 const ChildProcess = require('child_process');
-const moment = require('moment');
-const momentRange = require('moment-range');
-const Moment = momentRange.extendMoment(moment);
+const { Duration, Interval } = require('luxon');
 const Exec = command => ChildProcess.execSync(command).toString();
 
 const GIT = require('./git-status');
 
 if (
-  Moment.range(GIT.now.clone().subtract(10, 'seconds'), GIT.now).contains(
-    GIT.commit.time,
-  )
+  Interval.fromDateTimes(
+    GIT.now.minus(Duration.fromObject({ seconds: 10 })),
+    GIT.now,
+  ).contains(GIT.commit.time)
 ) {
   let amend = false;
 
