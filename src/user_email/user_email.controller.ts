@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  Post,
+  Body,
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
@@ -13,6 +15,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserAccess } from '../utils/guards/user-access.guard';
 import { UserEmail } from '../user_email/user_email.entity';
 import { UserEmailService } from './user_email.service';
+import { UserParam } from '../utils/decorators/user.param.decorator';
+import { User } from '../user/user.entity';
+import { UserEmailInfoGuard } from '../utils/guards/user-email-info.guard';
 
 @Controller('user_addresses')
 export class UserEmailController {
@@ -44,5 +49,20 @@ export class UserEmailController {
       Logger.error(ex);
       throw new InternalServerErrorException('Unknown error');
     }
+  }
+
+  /** Create a new user email address */
+  @Post()
+  // Verify user is logged in, Verify user cannot change read only columns
+  @UseGuards(AuthGuard(), UserEmailInfoGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async create(
+    @Body() user_email: UserEmail,
+    @UserParam() user: User,
+  ): Promise<UserEmail> {
+    return this.user_email_service.create({ ...user_email, user }).catch(ex => {
+      Logger.error(ex);
+      throw new InternalServerErrorException('Unknown error');
+    });
   }
 }
