@@ -38,4 +38,9 @@ export class UserEmailService {
       this.user_email_repository.create(user_email),
     );
   }
+
+  /** Delete email */
+  async deleteUserEmail(uuid: string): Promise<void> {
+    await this.user_email_repository.delete(uuid);
+  }
 }
