@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -14,13 +14,12 @@ import { DateTime } from 'luxon';
 import {
   TimestampTzTransformer,
   DateTimeToString,
-} from '../utils/transformers/';
-import { Gate } from '../gate/gate.entity';
-import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
-import { GateGroupAddress } from '../gate_group_address/gate_group_address.entity';
+} from '../utils/transformers';
+import { GateGroup } from '../gate-group/gate-group.entity';
+import { UserAddress } from '../user_address';
 
 @Entity()
-export class GateGroup {
+export class GateGroupAddress {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
@@ -38,27 +37,40 @@ export class GateGroup {
   @Transform(DateTimeToString)
   updated_at: DateTime;
 
+  /** Apartment, Suite, Box number, etc. */
   @Column('text')
-  description: string;
+  premise_range: string;
 
-  /** One GateGroup to Many Gate */
-  @OneToMany(() => Gate, (gate: Gate) => gate.gate_group)
-  gates: Gate[];
+  /** Street address */
+  @Column('text')
+  thoroughfare: string;
 
-  /** Many GateGroup to One GateGroupOwner */
+  /** City / Town */
+  @Column('text')
+  locality: string;
+
+  /** Postal code / ZIP Code */
+  @Column('text')
+  postal_code: string;
+
+  /** State / Province / Region (Use ISO code when available) */
+  @Column('text')
+  administrative_area: string;
+
+  /** Many GateGroupAddress to One GateGroup */
   @ManyToOne(
-    () => GateGroupOwner,
-    gate_group_owner => gate_group_owner.gate_groups,
+    () => GateGroup,
+    (gate_group: GateGroup) => gate_group.gate_group_addresses,
   )
-  @JoinColumn({ name: 'gate_group_owner_uuid' })
-  gate_group_owner: GateGroupOwner;
+  @JoinColumn({ name: 'gate_group_uuid' })
+  gate_group: GateGroup;
 
-  /** One GateGroup to Many GateGroupAddress */
+  /** One GateGroupAddress to Many UserAddress */
   @OneToMany(
-    () => GateGroupAddress,
-    (gate_group_address: GateGroupAddress) => gate_group_address.gate_group,
+    () => UserAddress,
+    (user_address: UserAddress) => user_address.gate_group_address,
   )
-  gate_group_addresses: GateGroupAddress[];
+  user_addresses: UserAddress[];
 
   // Put this in the "Many" entity
   /** Many B to One A */
