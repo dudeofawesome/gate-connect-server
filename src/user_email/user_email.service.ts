@@ -7,7 +7,7 @@ import { UserEmail } from './user_email.entity';
 export class UserEmailService {
   constructor(
     @InjectRepository(UserEmail)
-    private readonly userEmailRepository: Repository<UserEmail>,
+    private readonly user_email_repository: Repository<UserEmail>,
   ) {}
 
   findAll(): Promise<UserEmail[]> {
