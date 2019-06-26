@@ -13,6 +13,7 @@ import { AuthModule, passportModule } from '../auth/auth.module';
     forwardRef(() => AuthModule),
   ],
   providers: [UserAddressService],
+  controllers: [UserAddressController],
   exports: [UserAddressService],
 })
 export class UserAddressModule {}
