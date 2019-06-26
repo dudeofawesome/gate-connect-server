@@ -13,6 +13,7 @@ import { GateGroupOwnerModule } from './gate-group-owner/gate-group-owner.module
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { UserEmailModule } from './user_email/user_email.module';
+import { HologramModule } from './hologram/hologram.module';
 
 const config_service = ConfigService.getInstance();
 
@@ -38,6 +39,7 @@ const config_service = ConfigService.getInstance();
     GateGroupModule,
     GateGroupOwnerModule,
     UserEmailModule,
+    HologramModule,
   ],
   controllers: [AppController],
   providers: [AppService],
