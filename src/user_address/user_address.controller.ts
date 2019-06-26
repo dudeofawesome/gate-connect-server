@@ -27,6 +27,7 @@ export class UserAddressController {
 
   /** Create a new user address */
   @Post()
+  // Verify user is logged in, Verify user cannot change read only columns
   @UseGuards(AuthGuard(), UserAddressInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async create(
@@ -40,6 +41,7 @@ export class UserAddressController {
         throw new InternalServerErrorException('Unknown error');
       });
   }
+
   /** Delete user address */
   @Delete(':user_address_uuid')
   // Verify user is logged in
