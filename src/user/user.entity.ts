@@ -16,7 +16,7 @@ import {
 import { UserToken } from '../user-token/user-token.entity';
 import { UserAddress } from '../user_address';
 // import { UserEditable } from '../utils/decorators/user.editable.decorator';
-import { UserEmail } from '../user_email';
+import { UserEmail } from '../user_email/user_email.entity';
 
 @Entity()
 export class User {
