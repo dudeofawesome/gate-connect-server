@@ -24,9 +24,11 @@ export class UserAddressService {
     });
   }
 
+  /** Create user_address */
   create(user_address: Partial<UserAddress>): Promise<UserAddress> {
-    return this.userAddressRepository.save<UserAddress>(
-      this.userAddressRepository.create(user_address),
+    return this.user_address_repository.save<UserAddress>(
+      // TODO: define UserAddress.gate_group_address_uuid
+      this.user_address_repository.create(user_address),
     );
   }
 
