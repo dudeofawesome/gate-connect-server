@@ -5,7 +5,6 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { User } from '../../user';
 import { Reflector } from '@nestjs/core';
 
 /** Verify that user has not attempted to change any read-only properties */
@@ -29,12 +28,12 @@ export class UserInfoGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<Request>();
 
     // TODO: bypass checks if user is admin
-    Object.keys(req.user).forEach(key => {
+    Object.keys(req.body).forEach(key => {
       const user_editable = this.isUserEditable(key);
       if (
-        req.body[key] != null &&
-        req.body[key] !== req.user[key] &&
-        req.user[key] !== user_editable
+        !user_editable &&
+        req.user != null &&
+        req.body[key] !== req.user[key]
       ) {
         throw new UnprocessableEntityException(
           `You do not have permission to set user.${key}`,
