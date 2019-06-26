@@ -85,6 +85,7 @@ export class UserController {
       .catch(err => {
         if (err instanceof QueryFailedError) {
           err = err as QueryFailedErrorFull;
+          // TODO: Should the user request contain an email or is that a separate request?
           if (err.detail.startsWith('Key (email)=(')) {
             throw new ConflictException('Email already registered');
           } else {

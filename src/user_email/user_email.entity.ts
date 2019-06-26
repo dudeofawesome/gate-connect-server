@@ -7,21 +7,18 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Transform } from 'class-transformer';
+import { Transform, Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
-import {
-  TimestampTzTransformer,
-  DateTimeToString,
-} from '../utils/transformers';
-import { GateGroupAddress } from '../gate_group_address';
+import { TimestampTzTransformer } from '../utils/transformers/timestamptz.transformer';
+import { DateTimeToString } from '../utils/transformers/class-tranformers';
 import { User } from '../user/user.entity';
 
 @Entity()
 export class UserEmail {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  uuid: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -46,6 +43,7 @@ export class UserEmail {
   primary: boolean;
 
   @Column('text')
+  @Exclude()
   verification_token: string;
 
   @Column({
