@@ -38,7 +38,7 @@ export class UserAddress {
 
   /** Apartment, Suite, Box number, etc. */
   @Column('text')
-  premise_range: string;
+  premise: string;
 
   /** Street address */
   @Column('text')
