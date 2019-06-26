@@ -33,7 +33,7 @@ export class UserTokenService {
     );
   }
 
-  async deleteToken(token: string): Promise<any> {
+  async deleteToken(token: string): Promise<void> {
     await this.userTokenRepository.delete({
       authorization_token: token,
     });

@@ -64,8 +64,8 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(AuthGuard())
-  @UseInterceptors(ClassSerializerInterceptor)
   async logout(
+    // TODO: Why do we need req here?
     @Req() req: Request,
     @Headers('authorization') auth: string,
   ): Promise<boolean> {
