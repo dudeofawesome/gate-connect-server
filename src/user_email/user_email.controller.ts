@@ -31,4 +31,18 @@ export class UserEmailController {
       throw new InternalServerErrorException('Unknown error');
     }
   }
+
+  /** GET user_uuid's primary email address */
+  @Get(':user_uuid/primary')
+  // Verify user is logged in, Verify user_uuid matches logged in user's auth token
+  @UseGuards(AuthGuard(), UserAccess)
+  @UseInterceptors(ClassSerializerInterceptor)
+  findPrimaryEmail(@Param('user_uuid') user_uuid: string): Promise<UserEmail> {
+    try {
+      return this.user_email_service.findPrimaryEmail(user_uuid);
+    } catch (ex) {
+      Logger.error(ex);
+      throw new InternalServerErrorException('Unknown error');
+    }
+  }
 }
