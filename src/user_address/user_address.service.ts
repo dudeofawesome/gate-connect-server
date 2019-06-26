@@ -10,8 +10,11 @@ export class UserAddressService {
     private readonly user_address_repository: Repository<UserAddress>,
   ) {}
 
-  findAll(): Promise<UserAddress[]> {
-    return this.userAddressRepository.find();
+  /** Find address by uuid */
+  findByUUID(uuid: string): Promise<UserAddress> {
+    return this.user_address_repository.findOneOrFail({
+      where: uuid,
+    });
   }
 
   create(user_address: Partial<UserAddress>): Promise<UserAddress> {
