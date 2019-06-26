@@ -17,6 +17,13 @@ export class UserAddressService {
     });
   }
 
+  /** Return all addresses belonging to user_uuid */
+  findByUserUUID(user_uuid: string): Promise<UserAddress[]> {
+    return this.user_address_repository.find({
+      where: { user_uuid },
+    });
+  }
+
   create(user_address: Partial<UserAddress>): Promise<UserAddress> {
     return this.userAddressRepository.save<UserAddress>(
       this.userAddressRepository.create(user_address),
