@@ -10,8 +10,11 @@ export class UserEmailService {
     private readonly user_email_repository: Repository<UserEmail>,
   ) {}
 
-  findAll(): Promise<UserEmail[]> {
-    return this.userEmailRepository.find();
+  /** Find email by uuid */
+  findByUUID(uuid: string): Promise<UserEmail> {
+    return this.user_email_repository.findOneOrFail({
+      where: uuid,
+    });
   }
 
   create(user_email: Partial<UserEmail>): Promise<UserEmail> {
