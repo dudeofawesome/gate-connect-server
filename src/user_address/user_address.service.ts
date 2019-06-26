@@ -34,4 +34,9 @@ export class UserAddressService {
   async deleteUserAddress(uuid: string): Promise<void> {
     await this.user_address_repository.delete(uuid);
   }
+
+  /** Update user address  */
+  async patch(uuid: string, user_address: Partial<UserAddress>): Promise<void> {
+    await this.user_address_repository.update(uuid, user_address);
+  }
 }
