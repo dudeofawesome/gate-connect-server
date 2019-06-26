@@ -17,6 +17,12 @@ export class UserEmailService {
     });
   }
 
+  /** Return all emails belonging to user_uuid */
+  findByUserUUID(user_uuid: string): Promise<UserEmail[]> {
+    return this.user_email_repository.find({
+      where: { user_uuid },
+    });
+  }
   create(user_email: Partial<UserEmail>): Promise<UserEmail> {
     return this.userEmailRepository.save<UserEmail>(
       this.userEmailRepository.create(user_email),
