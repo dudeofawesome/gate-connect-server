@@ -4,21 +4,24 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
+import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import {
   TimestampTzTransformer,
   DateTimeToString,
-} from '../utils/transformers/';
-import { GateGroup } from '../gate-group/gate-group.entity';
+} from '../utils/transformers';
+import { GateGroupAddress } from '../gate_group_address';
+import { User } from '../user/user.entity';
 
 @Entity()
-export class GateGroupOwner {
-  @PrimaryGeneratedColumn('uuid')
-  uuid: string;
+export class UserEmail {
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -34,24 +37,31 @@ export class GateGroupOwner {
   @Transform(DateTimeToString)
   updated_at: DateTime;
 
-  @Column('text')
-  description: string;
-
-  @Column('text')
-  name: string;
-
-  @Column('text')
-  phone: string;
-
-  @Column('text')
+  @Column('text', { unique: true })
+  @IsEmail()
+  // @UserEditable() TODO: create this decorator
   email: string;
 
-  @Column('text')
-  address: string;
+  @Column({ default: false })
+  primary: boolean;
 
-  /** One GateGroupOwner to Many GateGroup */
-  @OneToMany(() => GateGroup, gate_group => gate_group.gate_group_owner)
-  gate_groups: GateGroup[];
+  @Column('text')
+  verification_token: string;
+
+  @Column({
+    type: 'timestamptz',
+    transformer: new TimestampTzTransformer(),
+  })
+  @Transform(DateTimeToString)
+  verification_sent_at: DateTime;
+
+  @Column({ default: false })
+  verified: boolean;
+
+  /** Many UserEmail to One User */
+  @ManyToOne(() => User, (user: User) => user.user_emails)
+  @JoinColumn({ name: 'user_uuid' })
+  user: User;
 
   // Put this in the "Many" entity
   /** Many B to One A */

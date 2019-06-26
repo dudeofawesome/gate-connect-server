@@ -12,6 +12,7 @@ import { GateGroupModule } from './gate-group/gate-group.module';
 import { GateGroupOwnerModule } from './gate-group-owner/gate-group-owner.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { UserEmailModule } from './user_email/user_email.module';
 
 const config_service = ConfigService.getInstance();
 
@@ -36,6 +37,7 @@ const config_service = ConfigService.getInstance();
     GateModule,
     GateGroupModule,
     GateGroupOwnerModule,
+    UserEmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,15 +8,13 @@ import {
 import { DateTime } from 'luxon';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
-import { User, UserService } from '../user/';
-import { UserTokenService, UserToken } from '../user-token/';
+import { User } from '../user/';
+import { UserTokenService } from '../user-token/';
 import * as Assert from '../utils/assert';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(forwardRef(() => UserService))
-    private readonly userService: UserService,
     @Inject(forwardRef(() => UserTokenService))
     private readonly userTokenService: UserTokenService,
   ) {}
