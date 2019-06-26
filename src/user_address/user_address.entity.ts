@@ -56,9 +56,6 @@ export class UserAddress {
   @Column('text')
   administrative_area: string;
 
-  @Column({ default: false })
-  primary: boolean;
-
   @Column('text')
   verification_pin: string;
 
