@@ -5,8 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -16,7 +14,6 @@ import {
   DateTimeToString,
 } from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
-import { GateGroup } from '../gate-group/gate-group.entity';
 import { UserAddress } from '../user_address';
 // import { UserEditable } from '../utils/decorators/user.editable.decorator';
 import { UserEmail } from '../user_email';
@@ -51,15 +48,6 @@ export class User {
   /** One User to Many UserToken */
   @OneToMany(() => UserToken, user_token => user_token.user)
   tokens: UserToken[];
-
-  /** Many User to Many GateGroup */
-  @ManyToMany(() => GateGroup)
-  @JoinTable({
-    name: 'user_join_gate_group',
-    joinColumn: { name: 'user_uuid' },
-    inverseJoinColumn: { name: 'gate_group_uuid' },
-  })
-  gate_groups: GateGroup[];
 
   /** One User to Many UserAddress */
   @OneToMany(
