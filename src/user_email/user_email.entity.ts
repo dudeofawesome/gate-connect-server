@@ -7,7 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Transform } from 'class-transformer';
+import { Transform, Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
@@ -46,6 +46,7 @@ export class UserEmail {
   primary: boolean;
 
   @Column('text')
+  @Exclude()
   verification_token: string;
 
   @Column({
