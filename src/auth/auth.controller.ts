@@ -38,7 +38,7 @@ export class AuthController {
   @UseInterceptors(ClassSerializerInterceptor)
   async login(@Body() authInfo: AuthInfo): Promise<string> {
     const user = await this.userService
-      .findOne({ email: authInfo.email })
+      .findByEmail(authInfo.email)
       .catch(ex => {
         if (ex instanceof EntityNotFoundError) {
           throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
