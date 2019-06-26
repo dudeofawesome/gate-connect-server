@@ -7,7 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Transform } from 'class-transformer';
+import { Transform, Exclude } from 'class-transformer';
 import { DateTime } from 'luxon';
 
 import {
@@ -57,6 +57,7 @@ export class UserAddress {
   administrative_area: string;
 
   @Column('text')
+  @Exclude()
   verification_pin: string;
 
   @Column({
