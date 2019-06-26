@@ -14,7 +14,7 @@ import {
   DateTimeToString,
 } from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
-import { UserAddress } from '../user_address';
+import { UserAddress } from '../user_address/user_address.entity';
 // import { UserEditable } from '../utils/decorators/user.editable.decorator';
 import { UserEmail } from '../user_email';
 

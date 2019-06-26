@@ -10,10 +10,8 @@ import {
 import { Transform, Exclude } from 'class-transformer';
 import { DateTime } from 'luxon';
 
-import {
-  TimestampTzTransformer,
-  DateTimeToString,
-} from '../utils/transformers';
+import { TimestampTzTransformer } from '../utils/transformers/timestamptz.transformer';
+import { DateTimeToString } from '../utils/transformers/class-tranformers';
 import { GateGroupAddress } from '../gate_group_address/gate_group_address.entity';
 import { User } from '../user/user.entity';
 

@@ -16,7 +16,7 @@ import {
   DateTimeToString,
 } from '../utils/transformers';
 import { GateGroup } from '../gate-group/gate-group.entity';
-import { UserAddress } from '../user_address';
+import { UserAddress } from '../user_address/user_address.entity';
 
 @Entity()
 export class GateGroupAddress {
