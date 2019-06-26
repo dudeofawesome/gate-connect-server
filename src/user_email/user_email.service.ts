@@ -23,6 +23,13 @@ export class UserEmailService {
       where: { user_uuid },
     });
   }
+
+  /** Return the user_uuid's primary email address */
+  findPrimaryEmail(user_uuid: string): Promise<UserEmail> {
+    return this.user_email_repository.findOneOrFail({
+      where: { user_uuid, primary: true },
+    });
+  }
   create(user_email: Partial<UserEmail>): Promise<UserEmail> {
     return this.userEmailRepository.save<UserEmail>(
       this.userEmailRepository.create(user_email),
