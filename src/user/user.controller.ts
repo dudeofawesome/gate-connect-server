@@ -141,23 +141,4 @@ export class UserController {
       password: await hash(password_dto.new_password),
     });
   }
-
-  /** Verify address code */
-  @Post(':user_uuid/verify-email')
-  @HttpCode(200)
-  @UseGuards(AuthGuard(), UserAccess)
-  @UseInterceptors(ClassSerializerInterceptor)
-  async verifyEmail(
-    @Param('user_uuid') uuid: string,
-    @Body() verification_email_token: string,
-  ): Promise<void> {
-    // Get user from the database
-    const user = await this.userService.findOne({ uuid });
-    // Verify that user provided pin and pin in database match
-    if (user.verification_email_token !== verification_email_token) {
-      throw new UnauthorizedException('Invalid email verification token');
-    }
-    // Mark address as verified
-    await this.userService.patch(uuid, { verified_email: true });
-  }
 }
