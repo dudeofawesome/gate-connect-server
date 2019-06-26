@@ -30,9 +30,12 @@ export class UserEmailService {
       where: { user_uuid, primary: true },
     });
   }
+
+  /** Create user_email */
   create(user_email: Partial<UserEmail>): Promise<UserEmail> {
-    return this.userEmailRepository.save<UserEmail>(
-      this.userEmailRepository.create(user_email),
+    return this.user_email_repository.save<UserEmail>(
+      // TODO: define UserAddress.gate_group_address_uuid
+      this.user_email_repository.create(user_email),
     );
   }
 }
