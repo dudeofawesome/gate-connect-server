@@ -20,8 +20,8 @@ import { User } from '../user/user.entity';
 
 @Entity()
 export class UserEmail {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  uuid: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
