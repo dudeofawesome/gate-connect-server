@@ -18,3 +18,5 @@ elsif File.exist?("#{file_without_ext}")
 else
   puts "Custom commit hook not found by common-hook"
 end
+
+exit $?.exitstatus
