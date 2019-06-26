@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from '../gate-group';
+import { UserEmail } from '../user_email/user_email.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly user_email_repository: Repository<UserEmail>,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -25,10 +27,13 @@ export class UserService {
     });
   }
 
-  async findOneByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneOrFail({
-      where: { email },
+  /** Return User belonging to email */
+  async findByEmail(email: string): Promise<User> {
+    // Get a UserEmail from the user_email table by email
+    const user_email = await this.user_email_repository.findOneOrFail({
+      where: email,
     });
+    return this.findOne(user_email.user);
   }
 
   async findOneByUUID(uuid: string): Promise<User> {
