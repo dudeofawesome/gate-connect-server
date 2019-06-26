@@ -43,4 +43,9 @@ export class UserEmailService {
   async deleteUserEmail(uuid: string): Promise<void> {
     await this.user_email_repository.delete(uuid);
   }
+
+  /** Update user email  */
+  async patch(uuid: string, user_email: Partial<UserEmail>): Promise<void> {
+    await this.user_email_repository.update(uuid, user_email);
+  }
 }
