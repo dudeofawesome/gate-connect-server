@@ -29,4 +29,9 @@ export class UserAddressService {
       this.userAddressRepository.create(user_address),
     );
   }
+
+  /** Delete address */
+  async deleteUserAddress(uuid: string): Promise<void> {
+    await this.user_address_repository.delete(uuid);
+  }
 }
