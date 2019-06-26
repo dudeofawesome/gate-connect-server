@@ -8,6 +8,7 @@ import {
   UseGuards,
   UnauthorizedException,
   HttpCode,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserAddressService } from './user_address.service';
@@ -17,6 +18,14 @@ import { UserAddressInfoGuard } from '../utils/guards/user-address-info.guard';
 export class UserAddressController {
   constructor(private readonly user_address_service: UserAddressService) {}
   @UseGuards(AuthGuard(), UserAddressInfoGuard) // TODO: Create UserAddressInfoGuard to make sure user can't change write only information
+  /** Delete user address */
+  @Delete(':user_address_uuid')
+  // Verify user is logged in
+  @UseGuards(AuthGuard())
+  async delete(@Param('user_address_uuid') uuid: string): Promise<void> {
+    await this.user_address_service.deleteUserAddress(uuid);
+  }
+
   /** Verify address code */
   @Post(':user_address_uuid/verify-address')
   @HttpCode(200)
