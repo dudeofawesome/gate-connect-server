@@ -7,7 +7,7 @@ import { UserAddress } from './user_address.entity';
 export class UserAddressService {
   constructor(
     @InjectRepository(UserAddress)
-    private readonly userAddressRepository: Repository<UserAddress>,
+    private readonly user_address_repository: Repository<UserAddress>,
   ) {}
 
   findAll(): Promise<UserAddress[]> {
