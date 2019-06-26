@@ -17,7 +17,7 @@ import {
 } from '../utils/transformers/';
 import { Gate } from '../gate/gate.entity';
 import { GateGroupOwner } from '../gate-group-owner/gate-group-owner.entity';
-import { GateGroupAddress } from '../gate_group_address';
+import { GateGroupAddress } from '../gate_group_address/gate_group_address.entity';
 
 @Entity()
 export class GateGroup {
