@@ -9,6 +9,7 @@ import {
   UseGuards,
   InternalServerErrorException,
   Logger,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -64,5 +65,13 @@ export class UserEmailController {
       Logger.error(ex);
       throw new InternalServerErrorException('Unknown error');
     });
+  }
+
+  /** Delete user address */
+  @Delete(':user_email_uuid')
+  // Verify user is logged in
+  @UseGuards(AuthGuard())
+  async delete(@Param('user_email_uuid') uuid: string): Promise<void> {
+    await this.user_email_service.deleteUserEmail(uuid);
   }
 }
