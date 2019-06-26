@@ -29,3 +29,4 @@ rules:
   'custom-rules/no-findOne-by-id': error
   'custom-rules/disallow-src-dist-import': error
   'custom-rules/param-decorator-no-leading-colon': error
+  'custom-rules/disable-barreling': error
