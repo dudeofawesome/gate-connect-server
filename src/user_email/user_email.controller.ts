@@ -8,6 +8,8 @@ import {
   Param,
   UseGuards,
   InternalServerErrorException,
+  UnauthorizedException,
+  HttpCode,
   Logger,
   Delete,
 } from '@nestjs/common';
@@ -73,5 +75,26 @@ export class UserEmailController {
   @UseGuards(AuthGuard())
   async delete(@Param('user_email_uuid') uuid: string): Promise<void> {
     await this.user_email_service.deleteUserEmail(uuid);
+  }
+
+  /** Verify email token */
+  @Post(':user_email_uuid/verify-email')
+  @HttpCode(200)
+  @UseGuards(AuthGuard(), UserEmailInfoGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async verifyUserEmail(
+    @Param('user_email_uuid') uuid: string,
+    @Body() email_verification_token: string,
+  ): Promise<void> {
+    // Get user email
+    const user_email = await this.user_email_service.findByUUID(uuid);
+    // Verify that user provided pin and pin in database match
+    if (user_email.verification_token !== email_verification_token) {
+      throw new UnauthorizedException('Invalid email verification pin');
+    }
+    // If we didn't throw anything, mark address as verified
+    await this.user_email_service.patch(uuid, {
+      verified: true,
+    });
   }
 }
