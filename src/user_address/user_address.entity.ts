@@ -18,7 +18,7 @@ import { User } from '../user/user.entity';
 @Entity()
 export class UserAddress {
   @PrimaryGeneratedColumn('uuid')
-  uuid: number;
+  uuid: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
