@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEmail } from './user_email.entity';
+import { RandomString } from 'secure-random-value';
 
 @Injectable()
 export class UserEmailService {
@@ -32,10 +33,12 @@ export class UserEmailService {
   }
 
   /** Create user_email */
-  create(user_email: Partial<UserEmail>): Promise<UserEmail> {
+  async create(user_email: Partial<UserEmail>): Promise<UserEmail> {
     return this.user_email_repository.save<UserEmail>(
-      // TODO: define UserAddress.gate_group_address_uuid
-      this.user_email_repository.create(user_email),
+      this.user_email_repository.create({
+        ...user_email,
+        verification_token: await RandomString(64),
+      }),
     );
   }
 
