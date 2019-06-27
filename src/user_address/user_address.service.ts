@@ -1,4 +1,10 @@
-import { Injectable, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  Logger,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserAddress } from './user_address.entity';
@@ -12,6 +18,7 @@ export class UserAddressService {
   constructor(
     @InjectRepository(UserAddress)
     private readonly user_address_repository: Repository<UserAddress>,
+    @Inject(forwardRef(() => GateGroupAddressService))
     private readonly gate_group_address_service: GateGroupAddressService,
   ) {}
 

@@ -12,7 +12,7 @@ import { GateGroupAddressModule } from '../gate_group_address/gate_group_address
     TypeOrmModule.forFeature([UserAddress]),
     passportModule,
     forwardRef(() => AuthModule),
-    GateGroupAddressModule,
+    forwardRef(() => GateGroupAddressModule),
   ],
   providers: [UserAddressService],
   controllers: [UserAddressController],
