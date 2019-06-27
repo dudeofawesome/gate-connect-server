@@ -1,10 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GateGroupAddress } from './gate_group_address.entity';
 import { GateGroup } from '../gate-group';
-import { UserAddress } from '../user_address/user_address.entity';
-import { compareTwoStrings } from 'string-similarity';
 import { UserAddressService } from '../user_address/user_address.service';
 
 @Injectable()
