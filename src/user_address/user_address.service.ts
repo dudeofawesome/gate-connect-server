@@ -22,6 +22,15 @@ export class UserAddressService {
     });
   }
 
+  /** Find addresses that haven't been linked to a GateGroupAddress */
+  findUnlinked(): Promise<UserAddress[]> {
+    return this.user_address_repository.find({
+      where: {
+        gate_group: null,
+      },
+    });
+  }
+
   /** Return all addresses belonging to user_uuid */
   findByUserUUID(user_uuid: string): Promise<UserAddress[]> {
     return this.user_address_repository.find({
