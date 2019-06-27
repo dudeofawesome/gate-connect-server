@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GateGroupAddress } from './gate_group_address.entity';
@@ -32,10 +29,10 @@ export class GateGroupAddressService {
       if (
         user_address.postal_code === gate_group_address.postal_code &&
         user_address.administrative_area ===
-        gate_group_address.administrative_area &&
-        user_address.premise != null ||
-        user_address.thoroughfare != null ||
-        user_address.locality != null
+          gate_group_address.administrative_area &&
+        user_address.premise != null &&
+        user_address.thoroughfare != null &&
+        user_address.locality != null &&
         user_address.premise >= min_premise &&
         user_address.premise <= max_premise
       ) {
