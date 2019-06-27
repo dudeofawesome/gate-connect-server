@@ -51,12 +51,7 @@ export class UserAddressController {
     @Body() user_address: Partial<UserAddress>,
     @UserParam() user: User,
   ): Promise<UserAddress> {
-    return this.user_address_service
-      .create({ ...user_address, user })
-      .catch(ex => {
-        Logger.error(ex);
-        throw new InternalServerErrorException('Unknown error');
-      });
+    return this.user_address_service.create({ ...user_address, user });
   }
 
   /** Delete user address */
