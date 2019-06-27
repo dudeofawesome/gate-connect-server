@@ -48,7 +48,7 @@ export class UserAddressController {
   @UseGuards(AuthGuard(), UserAddressInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async create(
-    @Body() user_address: UserAddress,
+    @Body() user_address: Partial<UserAddress>,
     @UserParam() user: User,
   ): Promise<UserAddress> {
     return this.user_address_service
