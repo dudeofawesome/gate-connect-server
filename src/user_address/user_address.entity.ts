@@ -77,7 +77,7 @@ export class UserAddress {
   gate_group_address: GateGroupAddress;
 
   /** Many UserAddress to One User */
-  @ManyToOne(() => User, (user: User) => user.user_addresses)
+  @ManyToOne(() => User, (user: User) => user.addresses)
   @JoinColumn({ name: 'user_uuid' })
   user: User;
 

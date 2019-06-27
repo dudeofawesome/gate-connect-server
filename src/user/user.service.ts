@@ -31,7 +31,7 @@ export class UserService {
     // Get a UserEmail from the user_email table by email
     return this.userRepository.findOneOrFail({
       where: {
-        user_emails: [{ email }],
+        emails: [{ email }],
       },
     });
   }
@@ -57,7 +57,7 @@ export class UserService {
         // .then(user => user.gate_groups);
         .then(user => {
           const gate_groups: GateGroup[] = [];
-          user.user_addresses.forEach(user_address => {
+          user.addresses.forEach(user_address => {
             gate_groups.push(user_address.gate_group_address.gate_group);
           });
           return gate_groups;

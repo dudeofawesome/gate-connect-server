@@ -57,7 +57,7 @@ export class UserEmail {
   verified: boolean;
 
   /** Many UserEmail to One User */
-  @ManyToOne(() => User, (user: User) => user.user_emails)
+  @ManyToOne(() => User, (user: User) => user.emails)
   @JoinColumn({ name: 'user_uuid' })
   user: User;
 

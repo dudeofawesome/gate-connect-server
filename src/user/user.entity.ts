@@ -54,11 +54,11 @@ export class User {
     () => UserAddress,
     (user_address: UserAddress) => user_address.user,
   )
-  user_addresses: UserAddress[];
+  addresses: UserAddress[];
 
   /** One User to Many UserAddress */
   @OneToMany(() => UserEmail, (user_email: UserEmail) => user_email.user)
-  user_emails: UserEmail[];
+  emails: UserEmail[];
 
   // Put this in the "Many" entity
   /** Many B to One A */
