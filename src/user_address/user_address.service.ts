@@ -22,6 +22,13 @@ export class UserAddressService {
     });
   }
 
+  /** Try to match each unmatched UserAddress to a GateGroupAddress */
+  async linkAllToGateGroupAddress(): Promise<void> {
+    (await this.findUnlinked()).forEach(user_address => {
+      this.linkToGateGroupAddress(user_address);
+    });
+  }
+
   /** Try to match user_address to a GroupAddress */
   linkToGateGroupAddress(user_address: Partial<UserAddress>): Promise<void> {
     // Require a uuid for patching
