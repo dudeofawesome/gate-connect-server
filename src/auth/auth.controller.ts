@@ -64,11 +64,7 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(AuthGuard())
-  async logout(
-    // TODO: Why do we need req here?
-    @Req() req: Request,
-    @Headers('authorization') auth: string,
-  ): Promise<boolean> {
+  async logout(@Headers('authorization') auth: string): Promise<boolean> {
     await this.userTokenService.deleteToken(auth.split('Bearer ')[1]);
     return true;
   }
