@@ -116,6 +116,12 @@ export class UserAddressService {
         }
       }
     });
+    Logger.log({
+      UserAddress,
+      closest_match: best_gate_group_address,
+      confidence_level: best_confidence,
+      match: best_confidence > required_confidence,
+    });
     if (best_confidence > required_confidence) {
       return;
     }
