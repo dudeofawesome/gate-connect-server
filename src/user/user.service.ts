@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
-import { Gate } from '../gate/gate.entity';
 
 @Injectable()
 export class UserService {
