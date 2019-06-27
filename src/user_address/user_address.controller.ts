@@ -73,17 +73,19 @@ export class UserAddressController {
   @UseGuards(AuthGuard(), UserAddressInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyUserAddress(
-    @Param('user_address_uuid') uuid: string,
+    @Param('user_address_uuid') user_address_uuid: string,
     @Body() address_verification_pin: string,
   ): Promise<void> {
     // Get user address
-    const user_address = await this.user_address_service.findByUUID(uuid);
+    const user_address = await this.user_address_service.findByUUID(
+      user_address_uuid,
+    );
     // Verify that user provided pin and pin in database match
     if (user_address.verification_pin !== address_verification_pin) {
       throw new UnauthorizedException('Invalid address verification pin');
     }
     // If we didn't throw anything, mark address as verified
-    await this.user_address_service.patch(uuid, {
+    await this.user_address_service.patch(user_address_uuid, {
       verified: true,
     });
   }

@@ -83,17 +83,19 @@ export class UserEmailController {
   @UseGuards(AuthGuard(), UserEmailInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyUserEmail(
-    @Param('user_email_uuid') uuid: string,
+    @Param('user_email_uuid') user_email_uuid: string,
     @Body() email_verification_token: string,
   ): Promise<void> {
     // Get user email
-    const user_email = await this.user_email_service.findByUUID(uuid);
+    const user_email = await this.user_email_service.findByUUID(
+      user_email_uuid,
+    );
     // Verify that user provided pin and pin in database match
     if (user_email.verification_token !== email_verification_token) {
       throw new UnauthorizedException('Invalid email verification pin');
     }
     // If we didn't throw anything, mark address as verified
-    await this.user_email_service.patch(uuid, {
+    await this.user_email_service.patch(user_email_uuid, {
       verified: true,
     });
   }
