@@ -60,7 +60,7 @@ export class UserEmailController {
   @UseGuards(AuthGuard(), UserEmailInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async create(
-    @Body() user_email: UserEmail,
+    @Body() user_email: Partial<UserEmail>,
     @UserParam() user: User,
   ): Promise<UserEmail> {
     return this.user_email_service.create({ ...user_email, user }).catch(ex => {
