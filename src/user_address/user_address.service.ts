@@ -30,13 +30,15 @@ export class UserAddressService {
   }
 
   /** Try to match user_address to a GroupAddress */
-  linkToGateGroupAddress(user_address: Partial<UserAddress>): Promise<void> {
+  async linkToGateGroupAddress(
+    user_address: Partial<UserAddress>,
+  ): Promise<void> {
     // Require a uuid for patching
     if (user_address.uuid == null) {
       throw new BadRequestException('Request must contain user_address.uuid');
     }
     // Search for best match
-    const gate_group_address = this.findGateGroupAddress(user_address);
+    const gate_group_address = await this.findGateGroupAddress(user_address);
     if (gate_group_address != null) {
       return this.patch(user_address.uuid, {
         ...user_address,
