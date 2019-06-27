@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserAddress } from './user_address.entity';
 import { RandomString } from 'secure-random-value';
+import { GateGroupAddressService } from '../gate_group_address/gate_group_address.service';
 
 @Injectable()
 export class UserAddressService {
   constructor(
     @InjectRepository(UserAddress)
     private readonly user_address_repository: Repository<UserAddress>,
+    private readonly gate_group_address_service: GateGroupAddressService,
   ) {}
 
   /** Find address by uuid */
@@ -27,11 +29,14 @@ export class UserAddressService {
 
   /** Create user_address */
   async create(user_address: Partial<UserAddress>): Promise<UserAddress> {
+    const gate_group_address = await this.gate_group_address_service.find(
+      user_address,
+    );
     return this.user_address_repository.save<UserAddress>(
-      // TODO: define UserAddress.gate_group_address_uuid
       this.user_address_repository.create({
         ...user_address,
         verification_pin: await RandomString(4, 'alpha_upper'),
+        gate_group_address,
       }),
     );
   }
