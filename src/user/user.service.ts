@@ -64,13 +64,4 @@ export class UserService {
         })
     );
   }
-
-  // TODO: will this work? (test it)
-  async getGates(user: User): Promise<Gate[]> {
-    const gates: Gate[] = [];
-    await user.user_addresses.forEach(user_address => {
-      gates.concat(user_address.gate_group_address.gate_group.gates);
-    });
-    return gates;
-  }
 }
