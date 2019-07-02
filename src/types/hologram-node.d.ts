@@ -3,31 +3,184 @@
 // Definitions by: Louis Orleans <https://github.com/dudeofawesome>
 
 declare module 'hologram-node' {
-  interface HologramOptions {
+  import { HologramAPI, HologramOptions } from 'hologram-node-types';
+
+  const Hologram: (api_key: string, options?: HologramOptions) => HologramAPI;
+  export = Hologram;
+}
+
+// TODO: figure out a better way to allow for a single base import + interface imports
+declare module 'hologram-node-types' {
+  export type HologramSIM = string;
+
+  export interface HologramOptions {
     /** Your orgId from the dashboard */
     orgid: string;
   }
 
-  interface HologramAPI {
+  export interface HologramAPI {
     Account: {
-      me: () => HologramResponse<HologramUser>;
-      getBalance: () => HologramResponse<HologramBalance>;
-      getBalanceHistory: () => HologramResponse<HologramUser>;
-      getBillingInfo: () => HologramResponse<HologramUser>;
-      getOrders: () => HologramResponse<HologramUser>;
-      addBalance: (amountToAdd: any) => HologramResponse<HologramUser>;
+      /** Gets current user information. */
+      me(): HologramResponse<HologramUser>;
+      /** Retrieve the current amount of credit you have on your account. */
+      getBalance(): HologramGetResponse<HologramBalance>;
+      /** Retrieve a history of transactions (credits and charges). */
+      getBalanceHistory(): HologramGetResponse<HologramBalanceHistoryItem[]>;
+      /** Retrieve the truncated version of your selected payment method. */
+      getBillingInfo(): HologramGetResponse<unknown>;
+      /** Retrieve the orders you have placed. */
+      getOrders(): HologramGetResponse<unknown>;
+      /**
+       * Charge the user's configured billing source and add that amount to
+       * your account balance.
+       */
+      addBalance(amountToAdd: number): HologramResponse<HologramAddBalanceData>;
     };
-    Activate: any;
-    Device: any;
-    Link: any;
-    Log: any;
+    Activate: {
+      /**
+       * The Data Plans endpoints return pricing and descriptions for the
+       * different data plans that Hologram offers. When changing the data plan
+       * for a cellular link via API, you must refer to the plan by its ID,
+       * which you can determine from these endpoints.
+       */
+      getPlans(): HologramGetResponse<HologramPlan[]>;
+      /**
+       * TODO: figure out why planId is a string here, but a number in the
+       * HologramPlan object
+       */
+      getPlan(planId: string): HologramGetResponse<HologramPlan>;
+      /**
+       * Preview the price and validity of an activation
+       */
+      preview(
+        /** SIM numbers to activate */
+        sims: HologramSIM[],
+        /**
+         * Device data plan. Look up plan IDs with
+         * [List Data Plans](https://jsapi.apiary.io/apis/hologram/reference/device-management/cellular-links/activate-sims.html#reference/device-management/data-plans/list-data-plans).
+         */
+        plan: number,
+        /**
+         * Geographic zone. Currently the valid zones are 1 and 2. Higher zones
+         * incur higher costs. See [pricing](https://hologram.io/pricing/) for
+         * details.
+         */
+        zone: string,
+        useAccountBalance: boolean,
+      ): HologramResponse<any>;
+      /**
+       * Activate the selected sims. Charges your configured billing method.
+       */
+      activate(
+        /** SIM numbers to activate */
+        sims: HologramSIM[],
+        /**
+         * Device data plan. Look up plan IDs with
+         * [List Data Plans](https://jsapi.apiary.io/apis/hologram/reference/device-management/cellular-links/activate-sims.html#reference/device-management/data-plans/list-data-plans).
+         */
+        plan: number,
+        /**
+         * Geographic zone. Currently the valid zones are 1 and 2. Higher zones
+         * incur higher costs. See [pricing](https://hologram.io/pricing/) for
+         * details.
+         */
+        zone: string,
+        useAccountBalance: boolean,
+      ): HologramActivateSimResponse;
+    };
+    Device: {
+      /** Get one of your devices. */
+      getOne(deviceid: string): HologramGetResponse<HologramDevice>;
+      getAll(
+        options?: HologramGetAllDevicesOptions,
+      ): HologramGetResponse<HologramDevice[]>;
+      getRouterCreds(deviceid: string): HologramGetResponse<unknown>;
+      genRouterCreds(deviceid: string): HologramResponse<unknown>;
+      linkTag(
+        tagid: string,
+        deviceids: unknown[],
+      ): HologramResponse<HologramDeviceTagLinkData>;
+      unlinkTag(
+        tagid: string,
+        deviceids: unknown[],
+      ): HologramResponse<HologramDeviceTagLinkData>;
+      changeName(deviceid: string, name: string): HologramResponse<unknown>;
+      sendSMS(
+        deviceid: string,
+        message: string,
+        options?: HologramSendSMSOptions,
+      ): HologramResponse<void>;
+      /**
+       * Send a TCP or UDP message to one or more devices on the Hologram
+       * network. See the guide for details.
+       */
+      sendData(
+        deviceids: number[],
+        data: string,
+        port: string,
+        protocol: string,
+      ): HologramResponse<HologramSendDataData[]>;
+      /**
+       * This endpoint does not require authentication with your API key, as
+       * the webhook GUID serves as an authentication token. In order to
+       * generate a webhook URL, please visit the cloud configuration page
+       * for your device.
+       */
+      sendDataViaWebhook(
+        deviceid: string,
+        webhookguid: string,
+        data: string,
+      ): HologramResponse<HologramSendDataData[]>;
+      getPhoneNumberCost(
+        deviceid: string,
+        country: string,
+        options?: HologramGetPhoneNumberCostOptions,
+      ): HologramGetResponse<unknown>;
+      addPhoneNumber(
+        deviceid: string,
+        country: string,
+        options?: HologramGetPhoneNumberCostOptions,
+      ): HologramResponse<unknown>;
+      removePhoneNumber(deviceid: string): HologramResponse<unknown>;
+      setTunnelable(
+        deviceid: string,
+        tunnelable: boolean,
+      ): HologramResponse<unknown>;
+    };
+    Link: {
+      getAll(): HologramGetResponse<unknown>;
+      getOne(linkId: string): HologramGetResponse<unknown>;
+      getUsage(linkId: string): HologramGetResponse<unknown>;
+      pause(linkId: string): HologramResponse<unknown>;
+      resume(linkId: string): HologramResponse<unknown>;
+      setOverageLimit(linkId: string, limit: string): HologramResponse<unknown>;
+      getStatusHistory(linkId: string): HologramResponse<unknown>;
+      /** Preview costs and information of changing a links plan . */
+      changePlanPreview(
+        linkId: string,
+        planid: number,
+        zone: string,
+      ): HologramResponse<unknown>;
+      /**
+       * Change the plan of a selected cellular link. Charges your user balance.
+       */
+      changePlan(
+        linkId: string,
+        planid: number,
+        zone: string,
+      ): HologramResponse<unknown>;
+    };
+    Log: {
+      getAll(options?: HologramGetLogOptions): HologramResponse<unknown>;
+      getForDevice(deviceid: string): HologramResponse<unknown>;
+    };
     Org: any;
     Report: any;
     Tag: any;
     Webhook: any;
   }
 
-  interface HologramResponse<Data> {
+  export interface HologramResponse<Data> {
     /** Indicates whether the request was successful. */
     success: boolean;
     /**
@@ -42,7 +195,7 @@ declare module 'hologram-node' {
     data: Data;
   }
 
-  interface HologramGetResponse<Data> extends HologramResponse<Data> {
+  export interface HologramGetResponse<Data> extends HologramResponse<Data> {
     /**
      * The query limit, some have this value built in and others often have a
      * maximum value that the limit can be
@@ -63,7 +216,7 @@ declare module 'hologram-node' {
     }[];
   }
 
-  interface HologramUser {
+  export interface HologramUser {
     /** Unique user id */
     id: number;
     /**
@@ -88,7 +241,7 @@ declare module 'hologram-node' {
     billingmethod: string;
   }
 
-  interface HologramBalance {
+  export interface HologramBalance {
     /** Unique user id */
     userid: number;
     /** Organization ID */
@@ -116,6 +269,323 @@ declare module 'hologram-node' {
     pendingcharges: string;
   }
 
-  const Hologram: (api_key: string, options?: HologramOptions) => HologramAPI;
-  export = Hologram;
+  export interface HologramBalanceHistoryItem {
+    /** TODO: what is this? */
+    id: number;
+    /** Unique user id */
+    userid: number;
+    /** Organization ID */
+    orgid: number;
+    /**
+     * TODO: what is this?
+     * ISO 8601 format
+     */
+    time: string;
+    description: string;
+    /**
+     * TODO: what is this?
+     * @example "-3.95"
+     */
+    amount: string;
+  }
+
+  export interface HologramAddBalanceData {
+    /** Was the request a preview (true) or an actual transaction (false)? */
+    preview: boolean;
+    sku: string;
+    unit_cost: number;
+    total_cost: number;
+    description: string;
+    extra_description: string;
+    needs_shipping: boolean;
+    shipping_cost: number;
+  }
+
+  export interface HologramPlan {
+    /** Unique integer ID for the data plan */
+    id: number;
+    /** internal use */
+    partnerid: number;
+    /** Human-readable name */
+    name: string;
+    description: string;
+    /** Monthly data included in the plan (in bytes) */
+    data: number;
+    /**
+     * for internal use
+     * TODO: maybe this is a boolean 0 or 1?
+     */
+    recurring: number;
+    /**
+     * Whether plan is available for new subscriptions
+     * TODO: maybe this is a boolean 0 or 1?
+     */
+    enabled: number;
+    /** for internal use */
+    billingperiod: string;
+    /** for internal use */
+    trialdays: string;
+    /** for internal use */
+    templateid: string;
+    /** for internal use */
+    carrierid: number;
+    /** for internal use */
+    groupid: number;
+    /**
+     * Flag indicating whether plan is a developer plan.
+     * nThis is equivalent to Pilot Plan. Only one Pilot/dev plan allowed per
+     * account, no monthly fee.
+     * TODO: maybe this is a boolean 0 or 1?
+     */
+    developerplan: number;
+    /** Tiers are automatic price discounts based on SIM counts */
+    tiers: {
+      [key: string]: {
+        /**
+         * This is the number of devices needed to be on your account in order
+         * to hit the given tier's pricing
+         */
+        devicecount: number;
+        /** These are the different coverage zones available for the plan */
+        zones: HologramZones;
+      };
+    };
+    /** The current tier that your account is on */
+    current_tier: string;
+    /** Zone pricing for the current tier */
+    zones: HologramZones;
+    /**
+     * Legacy field containing monthly cost of plan for zone X (deprecated)'
+     * @deprecated
+     */
+    amountX: string;
+    /**
+     * Legacy field containing overage cost of plan for zone X (deprecated)'
+     * @deprecated
+     */
+    overageX: string;
+    /**
+     * Legacy field containing SMS cost of plan for zone X (deprecated)'
+     * @deprecated
+     */
+    smsX: string;
+  }
+
+  export interface HologramZones {
+    /** ZONENAME could be something like "global" or "1" or "2" */
+    [key: string]: {
+      /**
+       * Monthly cost of plan for given zone
+       * @example "1.50"
+       */
+      amount: string;
+      /**
+       * Cost of SMS for given zone
+       * @example "0.19"
+       */
+      sms: string;
+      /**
+       * Per Megabyte cost of overage for plan
+       * @example "1"
+       */
+      overage: string;
+    };
+  }
+
+  export interface HologramActivateSimResponse
+    extends HologramResponse<{
+      /** Device ID of the new corresponding device */
+      device: number;
+      /** ID of the new cellular link */
+      link: number;
+      /**
+       * @example "99990000000012345678"
+       */
+      sim: string;
+    }> {
+    order_data: HologramOrderData;
+  }
+
+  export interface HologramOrderData {
+    /** Was the request a preview (true) or an actual transaction (false)? */
+    preview: boolean;
+    /**
+     * @example "PLAN"
+     */
+    sku: string;
+    /**
+     * @example "0.4"
+     */
+    unit_cost: string;
+    /**
+     * @example "0.4"
+     */
+    total_cost: string;
+    /**
+     * @example "Data plan for SIMs"
+     */
+    description: string;
+    extra_description: string;
+    needs_shipping: boolean;
+    /**
+     * @example "0"
+     */
+    shipping_cost: number;
+  }
+
+  export interface HologramGetAllDevicesOptions {
+    /**
+     * Return a maximum of this many devices.
+     * @example "20"
+     */
+    limit?: string;
+    /** Return the devices whose IDs come after the given ID */
+    startafter?: string;
+  }
+
+  export interface HologramDevice {
+    /** Integer device ID */
+    id: number;
+    /**
+     * ID of the organization that owns the device (may be a personal organization)
+     */
+    orgid: number;
+    /** User-configurable device name */
+    name: string;
+    /**
+     * for internal use
+     * @example "Unknown"
+     */
+    type: string;
+    /**
+     * Timestamp when the device record was created
+     * ISO 8601 format
+     */
+    whencreated: string;
+    /** Device phone number, if configured */
+    phonenumber: string;
+    /**
+     * Monthly cost of phone number
+     * @example "0.00"
+     */
+    phonenumber_cost: string;
+    /**
+     * Is tunneling enabled for the device?
+     * See the [guide](https://hologram.io/docs/guide/cloud/spacebridge-tunnel)
+     * for details
+     * TODO: maybe this is a boolean 0 or 1?
+     */
+    tunnelable: number;
+    /**
+     * Last IMEI seen for this device
+     * @example "957520074024080"
+     */
+    imei: string;
+    /**
+     * Last IMEI-SV seen for this device.
+     * This is the same as IMEI but instead of check digit has two digits at
+     * end for software version.
+     * @example "9575200740240801"
+     */
+    imei_sv: string;
+    /**
+     * for internal use
+     * TODO: maybe this is a boolean 0 or 1?
+     */
+    hidden: number;
+    /**
+     * Configurable device categories. See [Device Tags](#reference/device-management/device-tags/) for details.
+     */
+    tags: unknown[];
+    /** Information about the device's SIM and data plan */
+    links: {
+      cellular: {
+        id: number;
+        deviceid: number;
+        devicename: string;
+        orgid: number;
+        tunnelable: number;
+        partnerid: number;
+        sim: string;
+        msisdn: string;
+        imsi: number;
+        dataplansubscriptionid: number;
+        zone: number;
+        carrier: number;
+        state: string;
+        /** ISO 8601 format */
+        whenclaimed: string;
+        /** ISO 8601 format */
+        whenexpires: string;
+        /** ISO 8601 format */
+        whencreated: string;
+        overagelimit: number;
+        /**
+         * @example "hologram"
+         */
+        apn: string;
+      }[];
+    };
+    /** Detailed information about the latest cellular session for the SIM */
+    lastsession: {
+      linkid: number;
+      bytes: number;
+      /** ISO 8601 format */
+      session_begin: string;
+      /** ISO 8601 format */
+      session_end: string;
+      /**
+       * For legacy reasons, the IMEI in here is actually the IMEI-SV. To see
+       * the plain IMEI, see higher up in the Device object
+       */
+      imei: string;
+      /** Cell ID of last session (Can be used to get tower location) */
+      cellid: string;
+      /**
+       * Location area code of last session (can be used to get tower location)
+       */
+      lac: string;
+      network_name: string;
+      /** Flag is set if session is currently open */
+      active: boolean;
+      /**
+       * Longitude of device tower location
+       * @example
+       */
+      longitude: string;
+      /**
+       * Latitude of device tower location
+       * @example
+       */
+      latitude: string;
+      /** Range of estimate of device tower location */
+      range: number;
+    };
+  }
+
+  export interface HologramDeviceTagLinkData {
+    /** Human-readable tag name */
+    name: string;
+    /** Unique integer ID */
+    id: number;
+    /** IDs of devices linked to this tag */
+    deviceids: number[];
+  }
+
+  export interface HologramSendSMSOptions {
+    fromNumber?: string;
+  }
+
+  export interface HologramSendDataData {
+    deviceid: number;
+    messageid: string;
+  }
+
+  export interface HologramGetPhoneNumberCostOptions {
+    areacode?: string;
+  }
+
+  export interface HologramGetLogOptions {
+    deviceid?: string;
+  }
 }
