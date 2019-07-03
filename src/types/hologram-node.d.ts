@@ -12,6 +12,7 @@ declare module 'hologram-node' {
 // TODO: figure out a better way to allow for a single base import + interface imports
 declare module 'hologram-node-types' {
   export type HologramSIM = string;
+  export type NumBool = 0 | 1;
 
   export interface HologramOptions {
     /** Your orgId from the dashboard */
@@ -34,7 +35,7 @@ declare module 'hologram-node-types' {
        * Charge the user's configured billing source and add that amount to
        * your account balance.
        */
-      addBalance(amountToAdd: number): HologramResponse<HologramAddBalanceData>;
+      addBalance(amountToAdd: number): HologramResponse<HologramPlan>;
     };
     Activate: {
       /**
@@ -148,19 +149,22 @@ declare module 'hologram-node-types' {
       ): HologramResponse<unknown>;
     };
     Link: {
-      getAll(): HologramGetResponse<unknown>;
-      getOne(linkId: string): HologramGetResponse<unknown>;
+      getAll(): HologramGetResponse<HologramLink[]>;
+      getOne(linkId: string): HologramGetResponse<HologramLink>;
       getUsage(linkId: string): HologramGetResponse<unknown>;
-      pause(linkId: string): HologramResponse<unknown>;
-      resume(linkId: string): HologramResponse<unknown>;
-      setOverageLimit(linkId: string, limit: string): HologramResponse<unknown>;
+      pause(linkId: string): HologramResponse<HologramPauseData>;
+      resume(linkId: string): HologramResponse<HologramPauseData>;
+      setOverageLimit(
+        linkId: string,
+        limit: string,
+      ): HologramResponse<HologramLink>;
       getStatusHistory(linkId: string): HologramResponse<unknown>;
       /** Preview costs and information of changing a links plan . */
       changePlanPreview(
         linkId: string,
         planid: number,
         zone: string,
-      ): HologramResponse<unknown>;
+      ): HologramResponse<HologramPlan>;
       /**
        * Change the plan of a selected cellular link. Charges your user balance.
        */
@@ -168,16 +172,46 @@ declare module 'hologram-node-types' {
         linkId: string,
         planid: number,
         zone: string,
-      ): HologramResponse<unknown>;
+      ): HologramResponse<HologramPlan>;
     };
     Log: {
       getAll(options?: HologramGetLogOptions): HologramResponse<unknown>;
       getForDevice(deviceid: string): HologramResponse<unknown>;
     };
-    Org: any;
-    Report: any;
-    Tag: any;
-    Webhook: any;
+    Org: {
+      /**
+       * List all organizations that you are a member of. This includes the
+       * special "personal" organization tied to your user.
+       */
+      getAll(): HologramGetResponse<HologramOrg[]>;
+      getOne(orgid: string): HologramGetResponse<HologramOrg>;
+      getPending(): HologramGetResponse<unknown>;
+    };
+    Report: {
+      billing(): HologramResponse<unknown>;
+      devices(): HologramResponse<unknown>;
+    };
+    Tag: {
+      getAll(): HologramGetResponse<HologramTag[]>;
+      create(name: string): HologramResponse<HologramTag>;
+      update(tagId: string, name: string): HologramResponse<HologramTag>;
+      remove(tagId: string): HologramResponse<void>;
+    };
+    Webhook: {
+      get(deviceid: string): HologramGetResponse<unknown>;
+      create(
+        deviceid: string,
+        port: string,
+        protocol: string,
+      ): HologramResponse<unknown>;
+      update(
+        deviceid: string,
+        port: string,
+        protocol: string,
+      ): HologramResponse<unknown>;
+      regenerate(deviceid: string): HologramResponse<unknown>;
+      remove(deviceid: string): HologramResponse<unknown>;
+    };
   }
 
   export interface HologramResponse<Data> {
@@ -289,7 +323,7 @@ declare module 'hologram-node-types' {
     amount: string;
   }
 
-  export interface HologramAddBalanceData {
+  export interface HologramPlan {
     /** Was the request a preview (true) or an actual transaction (false)? */
     preview: boolean;
     sku: string;
@@ -587,5 +621,96 @@ declare module 'hologram-node-types' {
 
   export interface HologramGetLogOptions {
     deviceid?: string;
+  }
+
+  export interface HologramLink {
+    /** The link's unique integer ID */
+    id: number;
+    /** Device ID corresponding to the link */
+    deviceid: number;
+    /** Description of the device */
+    devicename: string;
+    /** ID of the organization that owns the link */
+    orgid: number;
+    /** Is tunneling enabled for the link? (1=true, 0=false) */
+    tunnelable: NumBool;
+    partnerid: number;
+    /** SIM number corresponding to the link */
+    sim: string;
+    /** MSISDN corresponding to the link */
+    msisdn: string;
+    /** IMSI corresponding to the link */
+    imsi: number;
+    /** The link's data plan type */
+    dataplansubscriptionid: number;
+    /** Geographical zone of the link's data plan */
+    zone: number;
+    /** ID of the carrier that the link last connected to */
+    carrier: number;
+    /** State of the link (LIVE, PAUSE, DEACTIVATE) */
+    state: 'LIVE' | 'PAUSE' | 'DEACTIVATE';
+    /** Timestamp when the SIM was activated */
+    whenclaimed: string;
+    /**
+     * Timestamp when the current billing period ends, or when the subscription
+     * expired
+     */
+    whenexpires: string;
+    /** Timestamp when the link's record was first created */
+    whencreated: string;
+    /**
+     * Configured overage limit, or -1 if no limit is set. See the
+     * [guide](https://hologram.io/docs/guide/connect/device-management#data-and-overage-limits)
+     * for details on overage limits.
+     */
+    overagelimit: number;
+    /**
+     * APN to use when connecting with this link's SIM card
+     */
+    apn: 'hologram' | string;
+  }
+
+  export interface HologramPauseData {
+    /**
+     * PENDING-USER (string) - New state of the link.
+     *
+     * May be a 'pending' state until the change is propagated to the cellular
+     * network.
+     */
+    newstate: string;
+  }
+
+  export interface HologramOrg {
+    /** Unique ID for the organization */
+    id: number;
+    /** Display name */
+    name: string;
+    /**
+     * Is this organization a personal organization belonging to a single user?
+     */
+    is_personal: boolean;
+    /** ID of the user that created the organization */
+    ownerid: number;
+    /** Members of the organization */
+    users: HologramOrgUser[];
+    /** Users with pending invitations to the organization */
+    pending: HologramOrgUser[];
+  }
+
+  export interface HologramOrgUser {
+    id: number;
+    permissions: string[];
+    first: string;
+    last: string;
+    email: string;
+  }
+
+  export interface HologramTag {
+    /** Human-readable tag name */
+    name: string;
+    /** Unique integer ID */
+    id: number;
+    /** IDs of devices linked to this tag */
+    deviceids: number[];
   }
 }
