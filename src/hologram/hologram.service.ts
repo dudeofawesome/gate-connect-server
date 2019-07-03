@@ -1,21 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import * as Hologram from 'hologram-node';
+import { HologramAPI, HologramDevice } from 'hologram-node-types';
+
+import { ConfigService } from '../config/config.service';
+
+export class HologramApiError extends Error {
+  constructor(message: string | undefined) {
+    super(message || 'Unknown Hologram API error');
+  }
+}
 
 @Injectable()
 export class HologramService {
-  findAll(): Promise<Gate[]> {
-    return this.gateRepository.find();
+  private hologram: HologramAPI;
+
+  constructor(private readonly config_service: ConfigService) {
+    this.hologram = Hologram(this.config_service.get('HOLOGRAM_API_KEY'), {
+      orgid: this.config_service.get('HOLOGRAM_ORG_ID'),
+    });
   }
 
-  create(gate: Partial<Gate>): Promise<Gate> {
-    return this.gateRepository.save<Gate>(this.gateRepository.create(gate));
+  async getDevice(device_id: string): Promise<HologramDevice> {
+    const res = await this.hologram.Device.getOne(device_id);
+    if (!res.success) {
+      throw new HologramApiError(res.error);
+    }
+
+    return res.data;
   }
 
-  async getGateGroup(uuid: string): Promise<GateGroup> {
-    return this.gateRepository
-      .findOneOrFail({
-        where: { uuid },
-        relations: ['gate_group'],
-      })
-      .then(gate => gate.gate_group);
+  async sendOpenGateMessage(device_id: string, message: string): Promise<void> {
+    const res = await this.hologram.Device.sendSMS(device_id, message);
+    if (!res.success) {
+      throw new HologramApiError(res.error);
+    }
   }
 }
