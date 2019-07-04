@@ -52,6 +52,17 @@ export class UserService {
 
   /** Return all the gate groups belonging to a user_uuid */
   async getGateGroups(user_uuid: string): Promise<GateGroup[]> {
+    // Find whether a GateGroup b exists in array a
+    function containsGateGroup(a: GateGroup[], b: GateGroup): boolean {
+      for (const gate_group of a) {
+        if (gate_group.uuid === b.uuid) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Find GateGroups and related Gates
     return this.userRepository
       .findOneOrFail({
         where: { uuid: user_uuid },
@@ -66,7 +77,10 @@ export class UserService {
         const gate_groups: GateGroup[] = [];
         user.addresses.forEach(user_address => {
           const gate_group = user_address.gate_group_address.gate_group;
+          if (!containsGateGroup(gate_groups, gate_group)) {
+            // if (!gate_groups.includes(gate_group)) { // this doesn't work
             gate_groups.push(gate_group);
+          }
         });
         return gate_groups;
       });
