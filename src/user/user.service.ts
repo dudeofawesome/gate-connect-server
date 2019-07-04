@@ -55,12 +55,18 @@ export class UserService {
     return this.userRepository
       .findOneOrFail({
         where: { uuid: user_uuid },
-        relations: ['gate_groups', 'gate_groups.gates'],
+        relations: [
+          'addresses',
+          'addresses.gate_group_address',
+          'addresses.gate_group_address.gate_group',
+          'addresses.gate_group_address.gate_group.gates',
+        ],
       })
       .then(user => {
         const gate_groups: GateGroup[] = [];
         user.addresses.forEach(user_address => {
-          gate_groups.push(user_address.gate_group_address.gate_group);
+          const gate_group = user_address.gate_group_address.gate_group;
+            gate_groups.push(gate_group);
         });
         return gate_groups;
       });
