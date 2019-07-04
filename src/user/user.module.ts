@@ -6,12 +6,14 @@ import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule, passportModule } from '../auth/auth.module';
+import { UserEmailModule } from '../user_email/user_email.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     passportModule,
     forwardRef(() => AuthModule),
+    UserEmailModule,
   ],
   providers: [UserService],
   controllers: [UserController],
