@@ -61,6 +61,7 @@ export class UserAddress {
   @Column({
     type: 'timestamptz',
     transformer: new TimestampTzTransformer(),
+    nullable: true,
   })
   @Transform(DateTimeToString)
   verification_sent_at: DateTime;
