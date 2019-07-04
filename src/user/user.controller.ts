@@ -32,6 +32,7 @@ import { UserInfoGuard } from '../utils/guards/user-info.guard';
 import { PasswordChangeDTO } from './password-change-dto';
 import { UserAccess } from '../utils/guards/user-access.guard';
 import { UserEmailService } from '../user_email/user_email.service';
+import { GateGroup } from '../gate-group/gate-group.entity';
 
 @Controller('users')
 export class UserController {
@@ -54,6 +55,16 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   async getSelf(@UserParam() user: User): Promise<User> {
     return user;
+  }
+
+  /** Get GateGroups belonging to user */
+  @Get(':uuid_uuid/gate-groups')
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getGateGroups(
+    @Param('user_uuid') user_uuid: string,
+  ): Promise<GateGroup[]> {
+    return this.userService.getGateGroups(user_uuid);
   }
 
   @Get(':user_uuid')
