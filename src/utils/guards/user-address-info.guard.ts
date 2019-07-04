@@ -49,6 +49,7 @@ export class UserAddressInfoGuard implements CanActivate {
     // if we're not using create, get req.user_address
     Object.keys(req.body).forEach(key => {
       const user_editable = this.isUserEditable(key);
+      // TODO: this will throw an error if user_address is null
       if (!user_editable && req.body[key] !== (user_address as any)[key]) {
         throw new UnprocessableEntityException(
           `You do not have permission to set user.${key}`,
