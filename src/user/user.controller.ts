@@ -31,6 +31,7 @@ import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 import { UserInfoGuard } from '../utils/guards/user-info.guard';
 import { PasswordChangeDTO } from './password-change-dto';
 import { UserAccess } from '../utils/guards/user-access.guard';
+import { UserEmailService } from '../user_email/user_email.service';
 
 @Controller('users')
 export class UserController {
@@ -38,6 +39,7 @@ export class UserController {
     private readonly userService: UserService,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private readonly userEmailService: UserEmailService,
   ) {}
 
   @Get()
@@ -76,25 +78,17 @@ export class UserController {
   @Post()
   @UseGuards(NoAuthGuard, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() user: User): Promise<User> {
-    return this.userService
-      .create({
-        ...user,
-        password: await hash(user.password),
-      })
-      .catch(err => {
-        if (err instanceof QueryFailedError) {
-          err = err as QueryFailedErrorFull;
-          // TODO: Should the user request contain an email or is that a separate request?
-          if (err.detail.startsWith('Key (email)=(')) {
-            throw new ConflictException('Email already registered');
-          } else {
-            throw new InternalServerErrorException();
-          }
-        } else {
-          throw new InternalServerErrorException();
-        }
-      });
+  async create(@Body() user: any): Promise<User> {
+    let response = await this.userService.create({
+      ...user,
+      password: await hash(user.password),
+    });
+    // TODO: fix the possibility that creating the user succeeds but the email fails
+    await this.userEmailService.create({
+      user: response,
+      email: user.email,
+    });
+    return response;
   }
 
   @Patch(':user_uuid')
