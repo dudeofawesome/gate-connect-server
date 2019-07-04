@@ -100,14 +100,19 @@ export class UserAddressService {
       const max_premise = range.split('-')[1];
       // Make sure zip code and state match, and address is within range
       if (
-        user_address.postal_code === gate_group_address.postal_code &&
-        user_address.administrative_area ===
-          gate_group_address.administrative_area &&
+        user_address.postal_code != null &&
+        gate_group_address.postal_code != null &&
+        user_address.postal_code.split('-')[0].toLowerCase() ===
+          gate_group_address.postal_code.split('-')[0].toLowerCase() &&
+        user_address.administrative_area != null &&
+        gate_group_address.administrative_area != null &&
+        user_address.administrative_area.toLowerCase() ===
+          gate_group_address.administrative_area.toLowerCase() &&
         user_address.premise != null &&
         user_address.thoroughfare != null &&
         user_address.locality != null &&
-        user_address.premise >= min_premise &&
-        user_address.premise <= max_premise
+        parseInt(user_address.premise) >= parseInt(min_premise) &&
+        parseInt(user_address.premise) <= parseInt(max_premise)
       ) {
         // Build street + city string and get a confidence level between them
         const user_address_string =
