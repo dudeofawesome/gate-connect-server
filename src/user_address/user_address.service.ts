@@ -136,7 +136,7 @@ export class UserAddressService {
       confidence_level: best_confidence,
       match: best_confidence > required_confidence,
     });
-    if (best_confidence > required_confidence) {
+    if (best_confidence < required_confidence) {
       return;
     }
     return best_gate_group_address;
