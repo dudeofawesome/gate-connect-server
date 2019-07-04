@@ -26,6 +26,13 @@ import { UserEmailInfoGuard } from '../utils/guards/user-email-info.guard';
 export class UserEmailController {
   constructor(private readonly user_email_service: UserEmailService) {}
 
+  @Get()
+  @UseGuards(AuthGuard())
+  @UseInterceptors(ClassSerializerInterceptor)
+  findAll(): Promise<UserEmail[]> {
+    return this.user_email_service.findAll();
+  }
+
   /** GET all of the email addresses belonging to :user_uuid */
   @Get(':user_uuid')
   // Verify user is logged in, Verify user_uuid matches logged in user's auth token
