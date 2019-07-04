@@ -22,7 +22,7 @@ import { UserParam } from '../utils/decorators/user.param.decorator';
 import { User } from '../user/user.entity';
 import { UserAddressInfoGuard } from '../utils/guards/user-address-info.guard';
 
-@Controller('user_addresses')
+@Controller('user-addresses')
 export class UserAddressController {
   constructor(private readonly user_address_service: UserAddressService) {}
 
