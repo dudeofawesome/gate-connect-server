@@ -70,9 +70,31 @@ export class UserController {
   @Get(':user_uuid')
   @UseGuards(AuthGuard(), UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOneByUUID(@Param('uuid') uuid: string): Promise<User> {
+  async findOneByUUID(@Param('user_uuid') uuid: string): Promise<User> {
     try {
       return await this.userService.findOneByUUID(uuid);
+    } catch (ex) {
+      if (ex instanceof QueryFailedError) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      } else {
+        Logger.error(ex);
+        throw new HttpException(
+          'Unknown error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
+  }
+
+  @Post(':user_uuid/relations')
+  @UseGuards(AuthGuard(), UserAccess)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async findOneByUUIDWithRelations(
+    @Param('user_uuid') uuid: string,
+    @Body() relations: string[],
+  ): Promise<User> {
+    try {
+      return await this.userService.findOneByUUID(uuid, relations);
     } catch (ex) {
       if (ex instanceof QueryFailedError) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);

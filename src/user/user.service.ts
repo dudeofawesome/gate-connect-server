@@ -39,9 +39,10 @@ export class UserService {
   }
 
   /** Find one user or fail given uuid */
-  async findOneByUUID(uuid: string): Promise<User> {
+  async findOneByUUID(uuid: string, relations?: string[]): Promise<User> {
     return this.userRepository.findOneOrFail({
       where: { uuid },
+      relations,
     });
   }
 
