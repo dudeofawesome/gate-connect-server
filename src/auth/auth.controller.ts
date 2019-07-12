@@ -43,7 +43,9 @@ export class AuthController {
         if (ex instanceof EntityNotFoundError) {
           throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
         } else {
-          Logger.error(ex);
+          // TODO: Logger logs empty object
+          // Logger.error(ex);
+          console.log(ex);
           throw new HttpException(
             'Unknown error',
             HttpStatus.INTERNAL_SERVER_ERROR,
