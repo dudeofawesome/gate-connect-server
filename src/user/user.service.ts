@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
 @Injectable()
 export class UserService {
@@ -30,12 +31,21 @@ export class UserService {
 
   /** Return User belonging to email */
   async findByEmail(email: string): Promise<User> {
-    // Get a UserEmail from the user_email table by email
-    return this.userRepository.findOneOrFail({
-      where: {
-        emails: [{ email }],
-      },
-    });
+    // Use a raw SQL query to find user based on email
+    // This is much faster than relying on typeorm.
+    const user = await this.userRepository.query(
+      `SELECT *
+      FROM "user"
+      WHERE uuid = (
+        SELECT user_uuid
+        FROM user_email
+        WHERE email = '${email}')`,
+    );
+    if (user.length === 0) {
+      // TODO: What criteria does this want for a parameter?
+      throw new EntityNotFoundError(User, 'What criteria?');
+    }
+    return user[0];
   }
 
   /** Find one user or fail given uuid */
