@@ -20,8 +20,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { verify } from 'argon2';
 import { RandomString } from 'secure-random-value';
 
-import { UserService } from '../user/';
-import { UserTokenService } from '../user-token';
+import { UserService } from '../user/user.service';
+import { UserTokenService } from '../user-token/user-token.service';
+import { UserToken } from '../user-token/user-token.entity';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 
 @Controller('auth')
@@ -36,7 +37,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(NoAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async login(@Body() authInfo: AuthInfo): Promise<string> {
+  async login(@Body() authInfo: AuthInfo): Promise<UserToken> {
     const user = await this.userService
       .findByEmail(authInfo.email)
       .catch(ex => {
@@ -54,8 +55,8 @@ export class AuthController {
       });
     if (await verify(user.password, authInfo.password)) {
       const token = await RandomString(64);
-      await this.userTokenService.saveToken(token, user);
-      return token;
+      const user_token = await this.userTokenService.saveToken(token, user);
+      return user_token;
     } else {
       Logger.error(
         `Failed attempt to login user ${user.uuid}. Incorrect password`,
