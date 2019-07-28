@@ -58,7 +58,7 @@ export class UserController {
   }
 
   /** Get GateGroups belonging to user */
-  @Get(':uuid_uuid/gate-groups')
+  @Get(':user_uuid/gate-groups')
   @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async getGateGroups(
