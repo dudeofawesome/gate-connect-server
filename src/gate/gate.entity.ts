@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  RelationId,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -49,6 +50,9 @@ export class Gate {
   @ManyToOne(() => GateGroup, (gate_group: GateGroup) => gate_group.gates)
   @JoinColumn({ name: 'gate_group_uuid' })
   gate_group: GateGroup;
+
+  @RelationId((gate: Gate) => gate.gate_group)
+  gate_group_uuid: string;
 
   // Put this in the "Many" entity
   /** Many B to One A */

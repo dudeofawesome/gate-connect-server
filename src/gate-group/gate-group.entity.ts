@@ -7,6 +7,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  RelationId,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -52,6 +53,9 @@ export class GateGroup {
   )
   @JoinColumn({ name: 'gate_group_owner_uuid' })
   gate_group_owner: GateGroupOwner;
+
+  @RelationId((entity: GateGroup) => entity.gate_group_owner)
+  gate_group_owner_uuid: string;
 
   /** One GateGroup to Many GateGroupAddress */
   @OneToMany(

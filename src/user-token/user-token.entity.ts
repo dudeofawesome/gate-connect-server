@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  RelationId,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { DateTime, Duration } from 'luxon';
@@ -43,6 +44,9 @@ export class UserToken {
   })
   @JoinColumn({ name: 'user_uuid' })
   user: User;
+
+  @RelationId((entity: UserToken) => entity.user)
+  user_uuid: string;
 
   // Put this in the "Many" entity
   /** Many B to One A */

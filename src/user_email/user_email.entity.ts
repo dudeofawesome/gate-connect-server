@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  RelationId,
 } from 'typeorm';
 import { Transform, Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
@@ -61,6 +62,9 @@ export class UserEmail {
   @ManyToOne(() => User, (user: User) => user.emails)
   @JoinColumn({ name: 'user_uuid' })
   user: User;
+
+  @RelationId((entity: UserEmail) => entity.user)
+  user_uuid: string;
 
   // Put this in the "Many" entity
   /** Many B to One A */
