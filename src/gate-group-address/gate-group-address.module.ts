@@ -1,8 +1,9 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { GateGroupAddressService, GateGroupAddress } from '.';
-import { UserAddressModule } from '../user_address/user_address.module';
+import { GateGroupAddress } from './gate-group-address.entity';
+import { GateGroupAddressService } from './gate-group-address.service';
+import { UserAddressModule } from '../user-address/user-address.module';
 
 @Module({
   imports: [

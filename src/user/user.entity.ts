@@ -14,9 +14,9 @@ import {
   DateTimeToString,
 } from '../utils/transformers/';
 import { UserToken } from '../user-token/user-token.entity';
-import { UserAddress } from '../user_address/user_address.entity';
+import { UserAddress } from '../user-address/user-address.entity';
 // import { UserEditable } from '../utils/decorators/user.editable.decorator';
-import { UserEmail } from '../user_email/user_email.entity';
+import { UserEmail } from '../user-email/user-email.entity';
 
 @Entity()
 export class User {

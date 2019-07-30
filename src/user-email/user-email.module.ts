@@ -1,9 +1,9 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserEmailService } from './user_email.service';
-import { UserEmail } from './user_email.entity';
-import { UserEmailController } from './user_email.controller';
+import { UserEmailService } from './user-email.service';
+import { UserEmail } from './user-email.entity';
+import { UserEmailController } from './user-email.controller';
 import { AuthModule, passportModule } from '../auth/auth.module';
 
 @Module({

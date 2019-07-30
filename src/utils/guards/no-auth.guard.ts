@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
-import { AuthService } from '../../auth';
+import { AuthService } from '../../auth/auth.service';
 
 /** Prevents authenticated users from accessing endpoint */
 @Injectable()

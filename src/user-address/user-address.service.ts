@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserAddress } from './user_address.entity';
+import { UserAddress } from './user-address.entity';
 import { RandomString } from 'secure-random-value';
-import { GateGroupAddressService } from '../gate_group_address/gate_group_address.service';
-import { GateGroupAddress } from '../gate_group_address/gate_group_address.entity';
+import { GateGroupAddressService } from '../gate-group-address/gate-group-address.service';
+import { GateGroupAddress } from '../gate-group-address/gate-group-address.entity';
 import { compareTwoStrings } from 'string-similarity';
 
 @Injectable()

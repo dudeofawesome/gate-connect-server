@@ -10,11 +10,11 @@ import { UserTokenModule } from './user-token/user-token.module';
 import { GateModule } from './gate/gate.module';
 import { GateGroupModule } from './gate-group/gate-group.module';
 import { GateGroupOwnerModule } from './gate-group-owner/gate-group-owner.module';
-import { GateGroupAddressModule } from './gate_group_address/gate_group_address.module';
-import { UserAddressModule } from './user_address/user_address.module';
+import { GateGroupAddressModule } from './gate-group-address/gate-group-address.module';
+import { UserAddressModule } from './user-address/user-address.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
-import { UserEmailModule } from './user_email/user_email.module';
+import { UserEmailModule } from './user-email/user-email.module';
 
 const config_service = ConfigService.getInstance();
 

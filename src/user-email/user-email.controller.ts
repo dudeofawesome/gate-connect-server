@@ -16,8 +16,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { UserAccess } from '../utils/guards/user-access.guard';
-import { UserEmail } from '../user_email/user_email.entity';
-import { UserEmailService } from './user_email.service';
+import { UserEmail } from './user-email.entity';
+import { UserEmailService } from './user-email.service';
 import { UserParam } from '../utils/decorators/user.param.decorator';
 import { User } from '../user/user.entity';
 import { UserEmailInfoGuard } from '../utils/guards/user-email-info.guard';

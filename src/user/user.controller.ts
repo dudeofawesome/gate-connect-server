@@ -23,15 +23,16 @@ import { AuthGuard } from '@nestjs/passport';
 import { hash, verify } from 'argon2';
 import { QueryFailedError } from 'typeorm';
 
-import { UserService, User } from '../user';
-import { AuthService } from '../auth';
+import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
+import { AuthService } from '../auth/auth.service';
 import { QueryFailedErrorFull } from '../types/query-failed-error-full';
 import { UserParam } from '../utils/decorators';
 import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 import { UserInfoGuard } from '../utils/guards/user-info.guard';
 import { PasswordChangeDTO } from './password-change-dto';
 import { UserAccess } from '../utils/guards/user-access.guard';
-import { UserEmailService } from '../user_email/user_email.service';
+import { UserEmailService } from '../user-email/user-email.service';
 import { GateGroup } from '../gate-group/gate-group.entity';
 
 @Controller('users')

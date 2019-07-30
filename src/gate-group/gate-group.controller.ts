@@ -15,8 +15,9 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { QueryFailedError } from 'typeorm';
 
-import { GateGroupService, GateGroup } from './';
-import { Gate } from '../gate/';
+import { GateGroup } from './gate-group.entity';
+import { GateGroupService } from './gate-group.service';
+import { Gate } from '../gate/gate.entity';
 
 @Controller('gate-groups')
 export class GateGroupController {

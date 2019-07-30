@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Gate } from './gate.entity';
-import { GateGroup } from '../gate-group';
+import { GateGroup } from '../gate-group/gate-group.entity';
 
 @Injectable()
 export class GateService {

@@ -7,9 +7,11 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { AuthService } from '../../auth';
-import { User, UserService } from '../../user';
-import { Gate, GateService } from '../../gate';
+import { AuthService } from '../../auth/auth.service';
+import { User } from '../../user/user.entity';
+import { UserService } from '../../user/user.service';
+import { Gate } from '../../gate/gate.entity';
+import { GateService } from '../../gate/gate.service';
 import * as Assert from '../assert';
 
 /**

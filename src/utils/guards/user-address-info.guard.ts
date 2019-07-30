@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
-import { UserAddress } from '../../user_address/user_address.entity';
-import { UserAddressService } from '../../user_address/user_address.service';
+import { UserAddress } from '../../user-address/user-address.entity';
+import { UserAddressService } from '../../user-address/user-address.service';
 
 /** Verify that user has not attempted to change any read-only properties */
 @Injectable()

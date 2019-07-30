@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
-import { UserEmail } from '../../user_email/user_email.entity';
-import { UserEmailService } from '../../user_email/user_email.service';
+import { UserEmail } from '../../user-email/user-email.entity';
+import { UserEmailService } from '../../user-email/user-email.service';
 
 /** Verify that user has not attempted to change any read-only properties */
 @Injectable()

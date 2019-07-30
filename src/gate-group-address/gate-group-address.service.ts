@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GateGroupAddress } from './gate_group_address.entity';
-import { GateGroup } from '../gate-group';
-import { UserAddressService } from '../user_address/user_address.service';
+import { GateGroupAddress } from './gate-group-address.entity';
+import { GateGroup } from '../gate-group/gate-group.entity';
+import { UserAddressService } from '../user-address/user-address.service';
 
 @Injectable()
 export class GateGroupAddressService {

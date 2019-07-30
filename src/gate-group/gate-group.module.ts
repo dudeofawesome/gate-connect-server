@@ -1,7 +1,9 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { GateGroupService, GateGroupController, GateGroup } from './';
+import { GateGroup } from './gate-group.entity';
+import { GateGroupController } from './gate-group.controller';
+import { GateGroupService } from './gate-group.service';
 import { AuthModule, passportModule } from '../auth/auth.module';
 
 @Module({

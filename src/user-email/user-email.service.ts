@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEmail } from './user_email.entity';
+import { UserEmail } from './user-email.entity';
 import { RandomString } from 'secure-random-value';
 
 @Injectable()

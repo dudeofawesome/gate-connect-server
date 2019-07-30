@@ -14,9 +14,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
-import { GateService, Gate } from './';
+import { Gate } from './gate.entity';
+import { GateService } from './gate.service';
 import { GateAccessGuard } from '../utils/guards/gate-access.guard';
-import { UserService, User } from '../user';
+import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
 
 @Controller('gates')
 export class GateController {

@@ -8,8 +8,8 @@ import {
 import { DateTime } from 'luxon';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
-import { User } from '../user/';
-import { UserTokenService } from '../user-token/';
+import { User } from '../user/user.entity';
+import { UserTokenService } from '../user-token/user-token.service';
 import * as Assert from '../utils/assert';
 
 @Injectable()

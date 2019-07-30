@@ -13,7 +13,7 @@ import { IsEmail } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import { TimestampTzTransformer } from '../utils/transformers/timestamptz.transformer';
-import { DateTimeToString } from '../utils/transformers/class-tranformers';
+import { DateTimeToString } from '../utils/transformers/class-transformers';
 import { User } from '../user/user.entity';
 
 @Entity()
