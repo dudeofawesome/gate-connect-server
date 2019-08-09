@@ -96,10 +96,21 @@ export class UserController {
       return await this.userEmailService.findByUserUUID(uuid);
     } catch (ex) {
       Logger.error(ex);
-      throw new HttpException(
-        'Unknown error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerErrorException('Unknown error');
+    }
+  }
+
+  @Get(':user_uuid/emails')
+  @UseGuards(AuthGuard(), UserAccess)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getPrimaryEmail(
+    @Param('user_uuid') user_uuid: string,
+  ): Promise<UserEmail> {
+    try {
+      return await this.userEmailService.findPrimaryEmail(user_uuid);
+    } catch (ex) {
+      Logger.error(ex);
+      throw new InternalServerErrorException('Unknown error');
     }
   }
 
