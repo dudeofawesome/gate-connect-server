@@ -86,13 +86,15 @@ export class UserService {
       })
       .then(user => {
         const gate_groups: GateGroup[] = [];
-        user.addresses.forEach(user_address => {
-          const gate_group = user_address.gate_group_address.gate_group;
-          if (!containsGateGroup(gate_groups, gate_group)) {
-            // if (!gate_groups.includes(gate_group)) { // this doesn't work
-            gate_groups.push(gate_group);
+        for (let user_address of user.addresses) {
+          if (user_address.gate_group_address != null) {
+            const gate_group = user_address.gate_group_address.gate_group;
+            if (!containsGateGroup(gate_groups, gate_group)) {
+              // if (!gate_groups.includes(gate_group)) { // this doesn't work
+              gate_groups.push(gate_group);
+            }
           }
-        });
+        }
         return gate_groups;
       });
   }
