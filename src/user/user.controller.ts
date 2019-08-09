@@ -32,6 +32,7 @@ import { NoAuthGuard } from '../utils/guards/no-auth.guard';
 import { UserInfoGuard } from '../utils/guards/user-info.guard';
 import { PasswordChangeDTO } from './password-change-dto';
 import { UserAccess } from '../utils/guards/user-access.guard';
+import { UserEmail } from '../user-email/user-email.entity';
 import { UserEmailService } from '../user-email/user-email.service';
 import { GateGroup } from '../gate-group/gate-group.entity';
 
@@ -84,6 +85,21 @@ export class UserController {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }
+    }
+  }
+
+  @Get(':user_uuid/emails')
+  @UseGuards(AuthGuard(), UserAccess)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getEmails(@Param('user_uuid') uuid: string): Promise<UserEmail[]> {
+    try {
+      return await this.userEmailService.findByUserUUID(uuid);
+    } catch (ex) {
+      Logger.error(ex);
+      throw new HttpException(
+        'Unknown error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
