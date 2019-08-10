@@ -176,9 +176,17 @@ export class UserController {
       ...user,
       password: await hash(user.password),
     });
-    // TODO: fix the possibility that creating the user succeeds but the email fails
     await this.userEmailService
       .create({ email: user.email }, response)
+      // If we couldn't create the email, go back and delete the user
+      .catch(error => {
+        this.userService.deleteUser(response.uuid);
+        if (error.code === '23505') {
+          throw new ConflictException('Email already exists.');
+        } else {
+          throw error;
+        }
+      });
     return response;
   }
 

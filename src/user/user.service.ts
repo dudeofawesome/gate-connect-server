@@ -98,4 +98,9 @@ export class UserService {
         return gate_groups;
       });
   }
+
+  /** Delete user */
+  async deleteUser(user_uuid: string): Promise<void> {
+    this.userRepository.delete(user_uuid);
+  }
 }
