@@ -177,7 +177,7 @@ export class UserController {
       password: await hash(user.password),
     });
     await this.userEmailService
-      .create({ email: user.email }, response)
+      .create({ email: user.email, primary: true }, response)
       // If we couldn't create the email, go back and delete the user
       .catch(error => {
         this.userService.deleteUser(response.uuid);
