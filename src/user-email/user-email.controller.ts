@@ -56,7 +56,7 @@ export class UserEmailController {
     @Body() user_email: Partial<UserEmail>,
     @UserParam() user: User,
   ): Promise<UserEmail> {
-    return this.user_email_service.create({ ...user_email, user }).catch(ex => {
+    return this.user_email_service.create(user_email, user).catch(ex => {
       Logger.error(ex);
       throw new InternalServerErrorException('Unknown error');
     });

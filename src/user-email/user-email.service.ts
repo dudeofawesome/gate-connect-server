@@ -38,10 +38,14 @@ export class UserEmailService {
   }
 
   /** Create user_email */
-  async create(user_email: Partial<UserEmail>): Promise<UserEmail> {
+  async create(user_email: Partial<UserEmail>, user: User): Promise<UserEmail> {
+    // Check if this is the user's first email, if so mark it primary
+    const primary = (await this.findByUserUUID(user.uuid)).length > 0;
     return this.user_email_repository.save<UserEmail>(
       this.user_email_repository.create({
         ...user_email,
+        primary,
+        user,
         verification_token: await RandomString(64),
       }),
     );

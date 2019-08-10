@@ -177,10 +177,8 @@ export class UserController {
       password: await hash(user.password),
     });
     // TODO: fix the possibility that creating the user succeeds but the email fails
-    await this.userEmailService.create({
-      user: response,
-      email: user.email,
-    });
+    await this.userEmailService
+      .create({ email: user.email }, response)
     return response;
   }
 
