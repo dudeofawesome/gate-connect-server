@@ -172,7 +172,7 @@ export class UserController {
   @UseGuards(NoAuthGuard, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async create(@Body() user: any): Promise<User> {
-    let response = await this.userService.create({
+    const response = await this.userService.create({
       ...user,
       password: await hash(user.password),
     });

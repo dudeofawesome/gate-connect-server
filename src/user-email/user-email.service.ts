@@ -17,9 +17,9 @@ export class UserEmailService {
   }
 
   /** Find email by uuid */
-  findByUUID(uuid: string): Promise<UserEmail> {
+  findByUUID(user_email_uuid: string): Promise<UserEmail> {
     return this.user_email_repository.findOneOrFail({
-      where: uuid,
+      where: user_email_uuid,
     });
   }
 

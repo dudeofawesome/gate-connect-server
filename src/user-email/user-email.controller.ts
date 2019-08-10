@@ -66,8 +66,10 @@ export class UserEmailController {
   @Delete(':user_email_uuid')
   // Verify user is logged in
   @UseGuards(AuthGuard())
-  async delete(@Param('user_email_uuid') uuid: string): Promise<void> {
-    await this.user_email_service.deleteUserEmail(uuid);
+  async delete(
+    @Param('user_email_uuid') user_email_uuid: string,
+  ): Promise<void> {
+    await this.user_email_service.deleteUserEmail(user_email_uuid);
   }
 
   /** Verify email token */
