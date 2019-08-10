@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
+  Query,
   UseGuards,
   Inject,
   forwardRef,
@@ -72,9 +73,35 @@ export class UserController {
   @Get(':user_uuid')
   @UseGuards(AuthGuard(), UserAccess)
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOneByUUID(@Param('user_uuid') uuid: string): Promise<User> {
+  async findOneByUUID(
+    @Param('user_uuid') uuid: string,
+    @Query('include-emails') includeEmails: boolean = false,
+    @Query('include-addresses') includeAddresses: boolean = false,
+    @Query('include-gates') includeGates: boolean = false,
+    @Query('include-tokens') includeTokens: boolean = false,
+  ): Promise<User> {
+    const relations: string[] = [];
+    if (includeGates) {
+      includeAddresses = true;
+    }
+
+    if (includeEmails) {
+      relations.push('emails');
+    }
+    if (includeAddresses) {
+      relations.push('addresses');
+    }
+    if (includeGates) {
+      relations.push('addresses.gate_group_address');
+      relations.push('addresses.gate_group_address.gate_group');
+      relations.push('addresses.gate_group_address.gate_group.gates');
+    }
+    if (includeTokens) {
+      relations.push('tokens');
+    }
+
     try {
-      return await this.userService.findOneByUUID(uuid);
+      return await this.userService.findOneByUUID(uuid, relations);
     } catch (ex) {
       if (ex instanceof QueryFailedError) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
