@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEmail } from './user-email.entity';
 import { RandomString } from 'secure-random-value';
+import { User } from 'dist/user';
 
 @Injectable()
 export class UserEmailService {
@@ -52,8 +53,15 @@ export class UserEmailService {
   }
 
   /** Delete email */
-  async deleteUserEmail(uuid: string): Promise<void> {
-    await this.user_email_repository.delete(uuid);
+  async deleteUserEmail(user_email_uuid: string): Promise<void> {
+    this.findByUUID(user_email_uuid).then(user_email => {
+      // Make sure this email address isn't set to be primary
+      if (!user_email.primary) {
+        return this.user_email_repository.delete(user_email_uuid);
+      } else {
+        throw new UnprocessableEntityException('Cannot delete primary emails.');
+      }
+    });
   }
 
   /** Update user email  */
