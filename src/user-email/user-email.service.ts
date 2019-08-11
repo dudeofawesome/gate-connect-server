@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEmail } from './user-email.entity';
 import { RandomString } from 'secure-random-value';
-import { User } from 'dist/user';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class UserEmailService {
