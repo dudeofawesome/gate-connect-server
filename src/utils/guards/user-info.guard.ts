@@ -20,7 +20,7 @@ export class UserInfoGuard implements CanActivate {
     //   context.getHandler(),
     // );
     // console.log(user_editable);
-    const user_editable_columns = ['name'];
+    const user_editable_columns = ['name', 'primary_email_uuid'];
     return user_editable_columns.includes(key);
   }
 

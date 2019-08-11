@@ -167,7 +167,7 @@ export class UserController {
   }
 
   @Patch(':user_uuid')
-  @UseGuards(AuthGuard(), UserInfoGuard, UserAccess)
+  @UseGuards(AuthGuard(), UserAccess, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async patch(
     @Param('user_uuid') uuid: string,
@@ -177,6 +177,10 @@ export class UserController {
       throw new UnprocessableEntityException(
         'Cannot change user.password in a full user patch',
       );
+    }
+    if (user.primary_email_uuid != null) {
+      user.primary_email = { uuid: user.primary_email_uuid } as UserEmail;
+      delete user.primary_email_uuid;
     }
 
     await this.userService.patch(uuid, user);
