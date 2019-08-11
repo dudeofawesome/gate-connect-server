@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { User } from './user.entity';
 import { GateGroup } from '../gate-group/gate-group.entity';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
@@ -57,7 +57,7 @@ export class UserService {
   }
 
   /** Update user's information based on uuid */
-  async patch(uuid: string, user: Partial<User>): Promise<void> {
+  async patch(uuid: string, user: DeepPartial<User>): Promise<void> {
     await this.userRepository.update(uuid, user);
   }
 

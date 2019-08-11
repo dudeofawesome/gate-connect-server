@@ -5,6 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  RelationId,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
@@ -59,6 +62,14 @@ export class User {
   /** One User to Many UserAddress */
   @OneToMany(() => UserEmail, (user_email: UserEmail) => user_email.user)
   emails: UserEmail[];
+
+  /** Many User to One UserEmail */
+  @ManyToOne(() => UserEmail, (user_email: UserEmail) => user_email.user)
+  @JoinColumn({ name: 'primary_email_uuid' })
+  primary_email: UserEmail;
+
+  @RelationId((entity: User) => entity.primary_email)
+  primary_email_uuid: string;
 
   // Put this in the "Many" entity
   /** Many B to One A */

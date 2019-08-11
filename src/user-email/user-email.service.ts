@@ -18,9 +18,13 @@ export class UserEmailService {
   }
 
   /** Find email by uuid */
-  findByUUID(user_email_uuid: string): Promise<UserEmail> {
+  findByUUID(
+    user_email_uuid: string,
+    include_user: boolean = false,
+  ): Promise<UserEmail> {
     return this.user_email_repository.findOneOrFail({
       where: user_email_uuid,
+      relations: include_user ? ['user'] : [],
     });
   }
 
@@ -51,14 +55,15 @@ export class UserEmailService {
 
   /** Delete email */
   async deleteUserEmail(user_email_uuid: string): Promise<void> {
-    this.findByUUID(user_email_uuid).then(user_email => {
-      // Make sure this email address isn't set to be primary
-      if (!user_email.primary) {
-        return this.user_email_repository.delete(user_email_uuid);
-      } else {
-        throw new UnprocessableEntityException('Cannot delete primary emails.');
-      }
-    });
+    const user_email = await this.findByUUID(user_email_uuid, true);
+
+    // Make sure this email address isn't set to be primary
+    if (user_email.user.primary_email_uuid != user_email.uuid) {
+      await this.user_email_repository.delete(user_email_uuid);
+      return;
+    } else {
+      throw new UnprocessableEntityException('Cannot delete primary emails.');
+    }
   }
 
   /** Update user email  */

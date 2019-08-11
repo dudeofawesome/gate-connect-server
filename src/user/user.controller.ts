@@ -171,23 +171,26 @@ export class UserController {
   @Post()
   @UseGuards(NoAuthGuard, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() user: any): Promise<User> {
-    const response = await this.userService.create({
-      ...user,
-      password: await hash(user.password),
+  async create(@Body() user_dto: any): Promise<User> {
+    const user = await this.userService.create({
+      ...user_dto,
+      password: await hash(user_dto.password),
     });
-    await this.userEmailService
-      .create({ email: user.email, primary: true }, response)
-      // If we couldn't create the email, go back and delete the user
+    const email = await this.userEmailService
+      .create({ email: user_dto.email }, user)
       .catch(error => {
-        this.userService.deleteUser(response.uuid);
+        // If we couldn't create the email, go back and delete the user
+        this.userService.deleteUser(user.uuid);
         if (error.code === '23505') {
           throw new ConflictException('Email already exists.');
         } else {
           throw error;
         }
       });
-    return response;
+    await this.userService.patch(user.uuid, {
+      primary_email: { uuid: email.uuid },
+    });
+    return this.userService.findOneByUUID(user.uuid);
   }
 
   @Patch(':user_uuid')

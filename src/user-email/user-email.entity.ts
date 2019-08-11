@@ -40,9 +40,6 @@ export class UserEmail {
   // @UserEditable() TODO: create this decorator
   email: string;
 
-  @Column({ default: false })
-  primary: boolean;
-
   @Column('text')
   @Exclude()
   verification_token: string;

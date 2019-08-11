@@ -94,27 +94,4 @@ export class UserEmailController {
       verified: true,
     });
   }
-
-  /** Set this email to primary */
-  @Post(':user_email_uuid/make-primary')
-  @HttpCode(200)
-  @UseGuards(AuthGuard(), UserEmailInfoGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
-  async makePrimary(
-    @Param('user_email_uuid') user_email_uuid: string,
-    @UserParam() user: User,
-  ): Promise<void> {
-    // Set the currently primary email to not primary
-    const current_primary_email = await this.user_email_service.findPrimaryEmail(
-      user.uuid,
-    );
-    this.user_email_service.patch(current_primary_email.uuid, {
-      primary: false,
-    });
-
-    // Now set the requested one to primary
-    this.user_email_service.patch(user_email_uuid, {
-      primary: true,
-    });
-  }
 }
