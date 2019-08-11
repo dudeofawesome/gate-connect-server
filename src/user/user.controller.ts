@@ -141,33 +141,6 @@ export class UserController {
     }
   }
 
-  @Post(':user_uuid/relations')
-  @UseGuards(AuthGuard(), UserAccess)
-  @UseInterceptors(ClassSerializerInterceptor)
-  async findOneByUUIDWithRelations(
-    @Param('user_uuid') uuid: string,
-    @Body() relations: string[],
-  ): Promise<User> {
-    // TODO: Flutter won't allow array literals in the request body
-    if (typeof relations === 'object') {
-      relations = relations.flutter_is_broken.split(',');
-    }
-    try {
-      return await this.userService.findOneByUUID(uuid, relations);
-    } catch (ex) {
-      if (ex instanceof QueryFailedError) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      } else {
-        // Logger.error(ex);
-        console.log(ex);
-        throw new HttpException(
-          'Unknown error',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
-  }
-
   @Post()
   @UseGuards(NoAuthGuard, UserInfoGuard)
   @UseInterceptors(ClassSerializerInterceptor)
