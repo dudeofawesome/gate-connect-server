@@ -65,7 +65,7 @@ export class UserAddressController {
   /** Verify address code */
   @Post(':user_address_uuid/verify-address')
   @HttpCode(200)
-  @UseGuards(AuthGuard(), UserAddressInfoGuard)
+  @UseGuards(AuthGuard())
   @UseInterceptors(ClassSerializerInterceptor)
   async verifyUserAddress(
     @Param('user_address_uuid') user_address_uuid: string,
