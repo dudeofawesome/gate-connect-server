@@ -25,7 +25,7 @@ export class UserAddressService {
   /** Find address by uuid */
   findByUUID(uuid: string): Promise<UserAddress> {
     return this.user_address_repository.findOneOrFail({
-      where: uuid,
+      where: { uuid },
     });
   }
 
