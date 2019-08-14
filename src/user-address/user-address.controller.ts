@@ -76,7 +76,7 @@ export class UserAddressController {
       user_address_uuid,
     );
     // Verify that user provided pin and pin in database match
-    if (user_address.verification_pin !== address_verification_pin) {
+    if (user_address.verification_pin !== address_verification_pin[0]) {
       throw new UnauthorizedException('Invalid address verification pin');
     }
     // If we didn't throw anything, mark address as verified
