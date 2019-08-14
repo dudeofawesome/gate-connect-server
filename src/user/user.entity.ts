@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
   RelationId,
   JoinColumn,
   ManyToOne,
@@ -63,8 +64,8 @@ export class User {
   @OneToMany(() => UserEmail, (user_email: UserEmail) => user_email.user)
   emails: UserEmail[];
 
-  /** Many User to One UserEmail */
-  @ManyToOne(() => UserEmail, (user_email: UserEmail) => user_email.user)
+  /** One User to One UserEmail */
+  @OneToOne(() => UserEmail)
   @JoinColumn({ name: 'primary_email_uuid' })
   primary_email: UserEmail;
 
